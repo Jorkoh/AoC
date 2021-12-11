@@ -1,10 +1,21 @@
 package year2021.day08
 
-import printResults
+import utils.Solution
 import kotlin.math.pow
 
 fun main() {
-    fun part1(input: List<String>): Int {
+    with(Day08()) {
+        test(::part1, 26)
+        test(::part2, 61229)
+        calculateResults()
+    }
+}
+
+private class Day08 : Solution {
+    override val day = 8
+    override val year = 2021
+
+    override fun part1(input: List<String>): Int {
         val entries = input.map { line ->
             val (signals, output) = line.split(" | ").map { it.split(' ') }
             Pair(signals, output)
@@ -13,7 +24,7 @@ fun main() {
         return entries.sumOf { (_, output) -> output.count { it.length in setOf(2, 4, 3, 7) } }
     }
 
-    fun part2(input: List<String>): Int {
+    override fun part2(input: List<String>): Int {
         val entries = input.map { line ->
             val (signals, output) = line.split(" | ").map { it.split(' ') }
             Pair(signals, output)
@@ -50,6 +61,4 @@ fun main() {
 
         return decodedNumbers.sum()
     }
-
-    printResults(::part1, ::part2, 26, 61229, 8, 2021)
 }

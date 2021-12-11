@@ -1,9 +1,20 @@
 package year2021.day02
 
-import printResults
+import utils.Solution
 
 fun main() {
-    fun part1(input: List<String>): Int {
+    with(Day02()) {
+        test(::part1, 150)
+        test(::part2, 900)
+        calculateResults()
+    }
+}
+
+private class Day02 : Solution {
+    override val day = 2
+    override val year = 2021
+
+    override fun part1(input: List<String>): Int {
         var horizontal = 0
         var depth = 0
 
@@ -19,7 +30,7 @@ fun main() {
         return horizontal * depth
     }
 
-    fun part2(input: List<String>): Int {
+    override fun part2(input: List<String>): Int {
         var horizontal = 0
         var depth = 0
         var aim = 0
@@ -38,6 +49,4 @@ fun main() {
 
         return horizontal * depth
     }
-
-    printResults(::part1, ::part2, 150, 900, 2, 2021)
 }

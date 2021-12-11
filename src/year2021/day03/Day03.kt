@@ -1,16 +1,27 @@
 package year2021.day03
 
-import printResults
+import utils.Solution
 
 fun main() {
-    fun part1(input: List<String>): Int {
+    with(Day03()) {
+        test(::part1, 198)
+        test(::part2, 230)
+        calculateResults()
+    }
+}
+
+private class Day03 : Solution {
+    override val day = 3
+    override val year = 2021
+
+    override fun part1(input: List<String>): Int {
         val gamma = input.first().indices.map { i -> if (input.count { it[i] == '1' } >= input.size / 2f) '1' else '0' }
         val epsilon = gamma.map { if (it == '1') '0' else '1' }
 
         return gamma.bToD() * epsilon.bToD()
     }
 
-    fun part2(input: List<String>): Int {
+    override fun part2(input: List<String>): Int {
         val remainingO2 = input.toMutableList()
         val remainingCO2 = input.toMutableList()
 
@@ -28,9 +39,7 @@ fun main() {
 
         return remainingO2.first().bToD() * remainingCO2.first().bToD()
     }
-
-    printResults(::part1, ::part2, 198, 230, 3, 2021)
 }
 
-fun String.bToD(): Int = Integer.parseInt(this, 2)
-fun List<Char>.bToD(): Int = joinToString("").bToD()
+private fun String.bToD(): Int = Integer.parseInt(this, 2)
+private fun List<Char>.bToD(): Int = joinToString("").bToD()

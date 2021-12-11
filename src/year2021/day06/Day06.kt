@@ -1,9 +1,20 @@
 package year2021.day06
 
-import printResults
+import utils.Solution
 
 fun main() {
-    fun part1(input: List<String>): Long {
+    with(Day06()) {
+        test(::part1, 5934L)
+        test(::part2, 26984457539L)
+        calculateResults()
+    }
+}
+
+private class Day06 : Solution {
+    override val day = 6
+    override val year = 2021
+
+    override fun part1(input: List<String>): Long {
         var fish = LongArray(9)
         input.first().split(',').forEach { fish[it.toInt()]++ }
 
@@ -14,7 +25,7 @@ fun main() {
         return fish.sum()
     }
 
-    fun part2(input: List<String>): Long {
+    override fun part2(input: List<String>): Long {
         var fish = LongArray(9)
         input.first().split(',').forEach { fish[it.toInt()]++ }
 
@@ -24,6 +35,4 @@ fun main() {
 
         return fish.sum()
     }
-
-    printResults(::part1, ::part2, 5934L, 26984457539L, 6, 2021)
 }

@@ -1,9 +1,20 @@
 package year2021.day05
 
-import printResults
+import utils.Solution
 
 fun main() {
-    fun part1(input: List<String>): Int {
+    with(Day05()) {
+        test(::part1, 5)
+        test(::part2, 12)
+        calculateResults()
+    }
+}
+
+private class Day05 : Solution {
+    override val day = 5
+    override val year = 2021
+
+    override fun part1(input: List<String>): Int {
         val lines = input.map { line ->
             val (start, end) = line.split(" -> ")
             val (startX, startY) = start.split(',').map { it.toInt() }
@@ -26,7 +37,7 @@ fun main() {
         }
     }
 
-    fun part2(input: List<String>): Int {
+    override fun part2(input: List<String>): Int {
         val lines = input.map { line ->
             val (start, end) = line.split(" -> ")
             val (startX, startY) = start.split(',').map { it.toInt() }
@@ -48,11 +59,9 @@ fun main() {
             }
         }
     }
-
-    printResults(::part1, ::part2, 5, 12, 5, 2021)
 }
 
-data class Line(val startX: Int, val startY: Int, val endX: Int, val endY: Int) {
+private data class Line(val startX: Int, val startY: Int, val endX: Int, val endY: Int) {
     val orthogonal = startX == endX || startY == endY
     val rangeX = if (startX <= endX) startX..endX else endX..startX
     val rangeY = if (startY <= endY) startY..endY else endY..startY

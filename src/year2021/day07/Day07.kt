@@ -1,10 +1,21 @@
 package year2021.day07
 
-import printResults
+import utils.Solution
 import kotlin.math.abs
 
 fun main() {
-    fun part1(input: List<String>): Int {
+    with(Day07()) {
+        test(::part1, 37)
+        test(::part2, 168)
+        calculateResults()
+    }
+}
+
+private class Day07 : Solution {
+    override val day = 7
+    override val year = 2021
+
+    override fun part1(input: List<String>): Int {
         val positions = input.first().split(',').map { it.toInt() }.sorted()
 
         // Optimally use the median as target
@@ -13,7 +24,7 @@ fun main() {
         }
     }
 
-    fun part2(input: List<String>): Int {
+    override fun part2(input: List<String>): Int {
         val positions = input.first().split(',').map { it.toInt() }.sorted()
 
         // Optimally use the mean, mean-1 and mean +1 as targets
@@ -21,6 +32,4 @@ fun main() {
             positions.sumOf { abs(target - it).let { d -> 0.5 * d * (d + 1) }.toInt() }
         }
     }
-
-    printResults(::part1, ::part2, 37, 168, 7, 2021)
 }
