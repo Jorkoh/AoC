@@ -6,7 +6,7 @@ fun main() {
     with(Day10()) {
         test(::part1, 26397)
         test(::part2, 288957L)
-        calculateResults()
+        solve()
     }
 }
 

@@ -12,7 +12,7 @@ interface Solution {
     fun part1(input: List<String>): Any
     fun part2(input: List<String>): Any
 
-    fun calculateResults() {
+    fun solve() {
         val input = readInput("year$year/day$dayString/input")
 
         println("\nYear $year, day $day")
@@ -20,11 +20,7 @@ interface Solution {
         println("PART 2:\t${part2(input)}")
     }
 
-    fun test(
-        part: (List<String>) -> Any,
-        expected: Any,
-        fileName: String = "test"
-    ) {
+    fun test(part: (List<String>) -> Any, expected: Any, fileName: String = "test") {
         val result = part(readInput("year$year/day$dayString/$fileName"))
         println("[${if (result == expected) "PASS" else "FAIL"}] TEST: $result\tEXPECTED: $expected\t")
     }
