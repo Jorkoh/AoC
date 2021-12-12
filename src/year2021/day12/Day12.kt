@@ -53,10 +53,10 @@ private class Day12 : Solution {
         if (start == end) return 1
 
         visited.add(start)
-        val paths = adjacencies[start]!!.sumOf { dfs(it, "end", visited, adjacencies) }
+        val pathCount = adjacencies[start]!!.sumOf { dfs(it, "end", visited, adjacencies) }
         visited.remove(start)
 
-        return paths
+        return pathCount
     }
 
     @Suppress("SameParameterValue")
@@ -66,7 +66,7 @@ private class Day12 : Solution {
         visits: MutableMap<String, Int>,
         adjacencies: Map<String, MutableList<String>>
     ): Int {
-        if (start.toType() == Type.StartOrEnd && visits[start] == 1 ||
+        if (start.toType() == Type.Start && visits[start] == 1 ||
             start.toType() == Type.Small && visits[start] == 2 ||
             start.toType() == Type.Small && visits[start] == 1 &&
             visits.any { it.key.toType() == Type.Small && it.value == 2 }
@@ -74,20 +74,20 @@ private class Day12 : Solution {
         if (start == end) return 1
 
         visits[start] = visits.getOrDefault(start, 0) + 1
-        val paths = adjacencies[start]!!.sumOf { dfs2(it, "end", visits, adjacencies) }
+        val pathCount = adjacencies[start]!!.sumOf { dfs2(it, "end", visits, adjacencies) }
         visits[start] = visits[start]!! - 1
 
-        return paths
+        return pathCount
     }
 
     enum class Type {
-        Big, Small, StartOrEnd
+        Big, Small, Start
     }
 
     private fun String.toType() = when {
+        this == "start" -> Type.Start
         all { it.isUpperCase() } -> Type.Big
-        this !in listOf("start", "end") -> Type.Small
-        else -> Type.StartOrEnd
+        else -> Type.Small
     }
 
     // For learning purposes, with path logging and comments. Pass an empty ArrayDeque for [path] to start
@@ -120,7 +120,7 @@ private class Day12 : Solution {
         path.removeLast()
         visited.remove(start)
 
-        // Return count
+        // Return count, alternatively
         return pathCount
     }
 }
