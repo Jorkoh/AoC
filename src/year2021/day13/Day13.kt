@@ -18,20 +18,23 @@ private class Day13 : Solution {
             line.split(',').map { it.toInt() }.let { it[0] to it[1] }
         }
         val instructions = input.drop(initialPoints.size + 1).map { line ->
-            line.drop(11).split('=').let { it[0] to it[1].toInt() }
+            line.drop(11).split('=').let { Axis.valueOf(it[0].uppercase()) to it[1].toInt() }
         }
 
         val points = instructions.take(1).fold(initialPoints) { points, (axis, value) ->
             points.map { (x, y) ->
-                when {
-                    axis == "y" && y > value -> x to value - (y - value)
-                    axis == "x" && x > value -> value - (x - value) to y
-                    else -> x to y
+                when (axis) {
+                    Axis.Y -> x to (if (y > value) value - (y - value) else y)
+                    Axis.X -> (if (x > value) value - (x - value) else x) to y
                 }
-            }.distinct()
-        }
+            }
+        }.distinct()
 
         return points.size
+    }
+
+    enum class Axis {
+        X, Y
     }
 
     override fun part2(input: List<String>): Any {
@@ -39,18 +42,18 @@ private class Day13 : Solution {
             line.split(',').map { it.toInt() }.let { it[0] to it[1] }
         }
         val instructions = input.drop(initialPoints.size + 1).map { line ->
-            line.drop(11).split('=').let { it[0] to it[1].toInt() }
+            line.drop(11).split('=').let { Axis.valueOf(it[0].uppercase()) to it[1].toInt() }
         }
+
 
         val points = instructions.fold(initialPoints) { points, (axis, value) ->
             points.map { (x, y) ->
-                when {
-                    axis == "y" && y > value -> x to value - (y - value)
-                    axis == "x" && x > value -> value - (x - value) to y
-                    else -> x to y
+                when (axis) {
+                    Axis.Y -> x to (if (y > value) value - (y - value) else y)
+                    Axis.X -> (if (x > value) value - (x - value) else x) to y
                 }
-            }.distinct()
-        }
+            }
+        }.distinct()
 
         return buildString {
             append('\n')
