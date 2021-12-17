@@ -5,8 +5,9 @@ import kotlin.math.max
 import kotlin.math.sign
 
 fun main() {
-    with(Day17()){
+    with(Day17()) {
         test(::part1, 45)
+        test(::part2, 112)
         solve()
     }
 }
@@ -32,38 +33,69 @@ private class Day17 : Solution {
 
         val maxYSpeedToCheck = 500
         val possibleYSpeeds = (0..maxYSpeedToCheck).filter { ySpeed ->
-            with(Simulation(0, ySpeed)) {
-                while (y >= targetY.first) {
-                    if (y in targetY) return@filter true
-                    step()
+            val sim = Simulation(0, ySpeed)
+            while (sim.y >= targetY.first) {
+                if (sim.y in targetY) return@filter true
+                sim.step()
+            }
+            return@filter false
+        }
+
+        val maxXSpeedToCheck = max(targetX.first, targetX.last) * targetX.first.sign
+        val bestYSpeed = possibleYSpeeds.reversed().first { ySpeed ->
+            (0..maxXSpeedToCheck).any { xSpeed ->
+                val sim = Simulation(xSpeed, ySpeed)
+                while (sim.y >= targetY.first) {
+                    if (sim.y in targetY && sim.x in targetX) return@any true
+                    sim.step()
                 }
-                return@filter false
+                return@any false
             }
         }
 
-        val bestCombo = possibleYSpeeds.reversed().firstNotNullOf { ySpeed ->
-            val workingXSpeed = (0..max(targetX.first, targetX.last) * targetX.first.sign).firstOrNull { xSpeed ->
-                with(Simulation(xSpeed, ySpeed)) {
-                    while (y >= targetY.first) {
-                        if (y in targetY && x in targetX) return@firstOrNull true
-                        step()
-                    }
-                    return@firstOrNull false
-                }
-            }
-
-            if (workingXSpeed == null) null
-            else workingXSpeed to ySpeed
-        }
-
-        return with(Simulation(bestCombo.first, bestCombo.second)) {
+        return with(Simulation(0, bestYSpeed)) {
             while (currentYSpeed > 0) step()
             y
         }
     }
 
     override fun part2(input: List<String>): Any {
-        TODO("Not yet implemented")
+        val targetX = input.first()
+            .substringBefore(',')
+            .substringAfter('=')
+            .split("..")
+            .map(String::toInt)
+            .let { it[0]..it[1] }
+
+        val targetY = input.first()
+            .substringAfter(',')
+            .substringAfter('=')
+            .split("..")
+            .map(String::toInt)
+            .let { it[0]..it[1] }
+
+        val maxYSpeedToCheck = 500
+        val minYSpeedToCheck = -500
+        val possibleYSpeeds = (minYSpeedToCheck..maxYSpeedToCheck).filter { ySpeed ->
+            val sim = Simulation(0, ySpeed)
+            while (sim.y >= targetY.first) {
+                if (sim.y in targetY) return@filter true
+                sim.step()
+            }
+            return@filter false
+        }
+
+        val maxXSpeedToCheck = max(targetX.first, targetX.last) * targetX.first.sign
+        return possibleYSpeeds.sumOf { ySpeed ->
+            (0..maxXSpeedToCheck).count { xSpeed ->
+                val sim = Simulation(xSpeed, ySpeed)
+                while (sim.y >= targetY.first) {
+                    if (sim.y in targetY && sim.x in targetX) return@count true
+                    sim.step()
+                }
+                return@count false
+            }
+        }
     }
 
     private class Simulation(initialXSpeed: Int, initialYSpeed: Int) {
