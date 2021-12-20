@@ -96,9 +96,10 @@ private class Day19 : Solution {
 
     private fun commonSolve(
         readings: Map<String, List<Coords>>,
-        readingsRelativeToFirst: MutableSet<Pair<String, List<Coords>>>,
-        scanners: MutableList<Coords>
-    ) {
+    ): Pair<Set<Pair<String, List<Coords>>>, List<Coords>> {
+        val readingsRelativeToFirst = mutableSetOf(readings.entries.first().toPair())
+        val scanners = mutableListOf(Coords(0, 0, 0))
+
         while (readingsRelativeToFirst.size < readings.size) {
             // Keep looping until every reading has been transformed
             for (readingToMatch in readingsRelativeToFirst) {
@@ -130,24 +131,22 @@ private class Day19 : Solution {
                 if (readingMatched) break
             }
         }
+
+        return readingsRelativeToFirst to scanners
     }
 
     override fun part1(input: List<String>): Any {
         val readings = commonParseReadings(input)
-        val readingsRelativeToFirst = mutableSetOf(readings.entries.first().toPair())
-        val scanners = mutableListOf(Coords(0, 0, 0))
 
-        commonSolve(readings, readingsRelativeToFirst, scanners)
+        val (readingsRelativeToFirst, _) = commonSolve(readings)
 
         return readingsRelativeToFirst.flatMap { it.second }.distinct().size
     }
 
     override fun part2(input: List<String>): Any {
         val readings = commonParseReadings(input)
-        val readingsRelativeToFirst = mutableSetOf(readings.entries.first().toPair())
-        val scanners = mutableListOf(Coords(0, 0, 0))
 
-        commonSolve(readings, readingsRelativeToFirst, scanners)
+        val (_, scanners) = commonSolve(readings)
 
         return scanners.maxOf { first ->
             scanners.filter { it != first }.maxOf { second ->
