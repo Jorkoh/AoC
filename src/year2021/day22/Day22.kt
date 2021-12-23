@@ -1,6 +1,8 @@
 package year2021.day22
 
 import utils.Solution
+import java.lang.Long.max
+import java.lang.Long.min
 
 fun main() {
     with(Day22()) {
@@ -23,7 +25,11 @@ private class Day22 : Solution {
         val y: LongRange,
         val z: LongRange
     ) {
-        val volume = (x.last - x.first) * (y.last - y.first) * (z.last - z.first)
+        val volume = if (x.isEmpty() || y.isEmpty() || z.isEmpty()) {
+            0L
+        } else {
+            (x.last - x.first) * (y.last - y.first) * (z.last - z.first)
+        }
     }
 
     private infix fun LongRange.overlaps(that: LongRange) = first <= that.last && last >= that.first
@@ -85,6 +91,7 @@ private class Day22 : Solution {
 
             onZones.removeAll(affectedZones)
             onZones.addAll(newZones)
+            println("Zones ${onZones.size}")
             if (type == OperationType.On) onZones.add(newZone)
         }
 
@@ -93,95 +100,46 @@ private class Day22 : Solution {
 
     // Transform the zones depending on newZone to create new zones "around" it
     private fun simplify(newZone: Cuboid, zone: Cuboid): List<Cuboid> {
-        val containedEdges = listOf(
-            newZone.x contains zone.x,
-            newZone.y contains zone.y,
-            newZone.z contains zone.z
-        ).count { it }
-        return when {
-            newZone contains zone -> emptyList()
-            zone contains newZone -> {
-                listOf(
-                    Cuboid(zone.x, zone.y, zone.z.first until newZone.z.first),
-                    Cuboid(zone.x, zone.y, (newZone.z.last + 1)..newZone.z.last),
-                    Cuboid(zone.x.first until newZone.x.first, zone.y, newZone.z.first..newZone.z.last),
-                    Cuboid((newZone.x.last + 1)..zone.x.last, zone.y, newZone.z.first..newZone.z.last)
-                )
+        val xRanges = buildList {
+            if (newZone.x.first > zone.x.first) {
+                add(zone.x.first until newZone.x.first)
             }
-            containedEdges == 2 -> {
-                val x = when {
-                    newZone.x contains zone.x -> zone.x
-                    zone.x.first < newZone.x.first -> zone.x.first until newZone.x.first
-                    else -> (newZone.x.last + 1)..zone.x.last
-                }
-                val y = when {
-                    newZone.y contains zone.y -> zone.y
-                    zone.y.first < newZone.y.first -> zone.y.first until newZone.y.first
-                    else -> (newZone.y.last + 1)..zone.y.last
-                }
-                val z = when {
-                    newZone.z contains zone.z -> zone.z
-                    zone.z.first < newZone.z.first -> zone.z.first until newZone.z.first
-                    else -> (newZone.z.last + 1)..zone.z.last
-                }
-                listOf(Cuboid(x, y, z))
+            if (newZone.x.last + 1 < zone.x.last) {
+                add((newZone.x.last + 1)..zone.x.last)
             }
-            containedEdges == 1 -> {
-                // should result in 2
-                when {
-                    newZone.x contains zone.x -> listOf(
-                        Cuboid(
-                            zone.x,
-                            if(zone.y.first < newZone.y.first) zone.y.first until newZone.y.first
-                            else (newZone.y.last + 1)..zone.y.last,
-                            zone.z
-                        ),
-                        Cuboid(
-                            zone.x,
-                            if(zone.y.first < newZone.y.first) newZone.y.first..zone.y.last
-                            else zone.y.first..newZone.y.last,
-                            if(zone.z.first < newZone.z.first) zone.z.first until newZone.z.first
-                            else (newZone.z.last + 1)..zone.z.last
-                        )
-                    )
-                    newZone.y contains zone.y -> listOf(
-                        Cuboid(
-                            if(zone.x.first < newZone.x.first) zone.x.first until newZone.x.first
-                            else (newZone.x.last + 1)..zone.x.last,
-                            zone.y,
-                            zone.z
-                        ),
-                        Cuboid(
-                            if(zone.x.first < newZone.x.first) newZone.x.first..zone.x.last
-                            else zone.x.first..newZone.x.last,
-                            zone.y,
-                            if(zone.z.first < newZone.z.first) zone.z.first until newZone.z.first
-                            else (newZone.z.last + 1)..zone.z.last
-                        )
-                    )
-                    newZone.z contains zone.z -> listOf(
-                        Cuboid(
-                            if(zone.x.first < newZone.x.first) zone.x.first until newZone.x.first
-                            else (newZone.x.last + 1)..zone.x.last,
-                            zone.y,
-                            zone.z
-                        ),
-                        Cuboid(
-                            if(zone.x.first < newZone.x.first) newZone.x.first..zone.x.last
-                            else zone.x.first..newZone.x.last,
-                            if(zone.y.first < newZone.y.first) zone.y.first until newZone.y.first
-                            else (newZone.y.last + 1)..zone.y.last,
-                            zone.z
-                        )
-                    )
-                    else -> throw IllegalStateException()
-                }
+            if (newZone.x.first > zone.x.first || newZone.x.last + 1 < zone.x.last) {
+                add(max(zone.x.first, newZone.x.first)..min(zone.x.last, newZone.x.last))
             }
-            containedEdges == 0 -> {
-                // multiple cases here
-                emptyList<Cuboid>()
-            }
-            else -> throw IllegalStateException()
         }
+        val yRanges = buildList {
+            if (newZone.y.first > zone.y.first) {
+                add(zone.y.first until newZone.y.first)
+            }
+            if (newZone.y.last + 1 < zone.y.last) {
+                add((newZone.y.last + 1)..zone.y.last)
+            }
+            if (newZone.y.first > zone.y.first || newZone.y.last + 1 < zone.y.last) {
+                add(max(zone.y.first, newZone.y.first)..min(zone.y.last, newZone.y.last))
+            }
+        }
+        val zRanges = buildList {
+            if (newZone.z.first > zone.z.first) {
+                add(zone.z.first until newZone.z.first)
+            }
+            if (newZone.z.last + 1 < zone.z.last) {
+                add((newZone.z.last + 1)..zone.z.last)
+            }
+            if (newZone.z.first > zone.z.first || newZone.z.last + 1 < zone.z.last) {
+                add(max(zone.z.first, newZone.z.first)..min(zone.z.last, newZone.z.last))
+            }
+        }
+
+        return xRanges.map { xRange ->
+            yRanges.map { yRange ->
+                zRanges.map { zRange ->
+                    Cuboid(xRange, yRange, zRange)
+                }
+            }
+        }.flatten().flatten().filterNot { it.x == newZone.x && it.y == newZone.y && it.z == newZone.z }
     }
 }
