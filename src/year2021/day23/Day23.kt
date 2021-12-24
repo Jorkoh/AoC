@@ -20,6 +20,7 @@ fun main() {
 //  3. Once it stops moving on hallway can't move except to enter its final room
 // To sum up: if they are in their starting spot they can move to available hallway, optionally stop and
 // then enter their final room to rest (without blocking an external one in that room)
+// NOTICING THAT IF AN AMPHI CAN ENTER ITS ROOM THAT'S THE BEST MOVE MADE IT GO FROM 55 TO 3 SECONDS
 private class Day23 : Solution {
     override val day = 23
     override val year = 2021
@@ -28,68 +29,89 @@ private class Day23 : Solution {
         A, B, C, D
     }
 
-    private data class Amphi(val type: Type, val position: Int, val isResting: Boolean)
+    private data class Amphi(val type: Type, val position: Int, val isResting: Boolean = false)
 
     private data class Board(val amphis: List<Amphi>, var score: Int = 0) {
 
         companion object {
             val memo = mutableMapOf<List<Amphi>, List<Pair<List<Amphi>, Int>>>()
             val stoppableHallwayIndices = listOf(0, 1, 3, 5, 7, 9, 10)
+            val typeToRoomI = mapOf(
+                Type.A to 11..14,
+                Type.B to 15..18,
+                Type.C to 19..22,
+                Type.D to 23..26
+            )
+            val roomIToType = mapOf(
+                11 to Type.A, 12 to Type.A, 13 to Type.A, 14 to Type.A,
+                15 to Type.B, 16 to Type.B, 17 to Type.B, 18 to Type.B,
+                19 to Type.C, 20 to Type.C, 21 to Type.C, 22 to Type.C,
+                23 to Type.D, 24 to Type.D, 25 to Type.D, 26 to Type.D
+            )
         }
 
-        fun isWon() = amphis.all { amphis -> amphis.position.toRoomType() == amphis.type }
+        fun isWon() = amphis.all { amphis -> roomIToType[amphis.position] == amphis.type }
 
-        fun nextBoards(score: Int, roomLength: Int): List<Board> = memo.computeIfAbsent(this.amphis) { initialAmphis ->
-            buildList {
-                // Only move those that are not in their final positions
-                amphis.filterNot { it.isResting }.forEach { amphi ->
+        fun nextBoards(score: Int, deep: Boolean): List<Board> = memo.computeIfAbsent(this.amphis) { initialAmphis ->
+            val enterRoomCase = initialAmphis.filter { it.position.isHallway() }.firstNotNullOfOrNull { amphi ->
+                val initialPos = amphi.position
+                val roomIndices = if (deep) typeToRoomI[amphi.type]!! else typeToRoomI[amphi.type]!!.take(2)
+                val roomAvailable = roomIndices.all {
+                    val amphiAtRoom = getAt(it)
+                    amphiAtRoom == null || amphiAtRoom.type == amphi.type
+                }
+                val rI = amphi.type.roomTypeToHallwayIndex()
+                val steps = if (rI < initialPos) rI until initialPos else (initialPos + 1)..rI
+                if (roomAvailable && steps.all { getAt(it) == null }) {
+                    // Available and no obstructions
+                    val roomStart = roomIndices.first()
+                    val restingPosition = roomIndices.last { getAt(it) == null }
+                    val multiplier = amphi.type.toMultiplier()
+                    val toEnterRoom = restingPosition - roomStart + 1
+                    val toTraverseHallway = (steps.last - steps.first) + 1
+                    val cost = (toEnterRoom + toTraverseHallway) * multiplier
+                    val newAmphis = initialAmphis
+                        .filterNot { it == amphi }
+                        .toMutableList().apply { add(amphi.copy(position = restingPosition, isResting = true)) }
+
+                    newAmphis to cost
+                } else {
+                    null
+                }
+            }
+
+            if (enterRoomCase != null) {
+                listOf(enterRoomCase)
+            } else {
+                // exit room cases
+                amphis.filter { amphi ->
+                    !amphi.isResting && amphi.position.isRoom() && (typeToRoomI[roomIToType[amphi.position]]!!.first
+                            until amphi.position).all { getAt(it) == null }
+                }.flatMap { amphi ->
                     val initialPos = amphi.position
-                    if (initialPos.isRoom()) {
-                        // Early return if room exit is blocked // TODO adapt this for other depths
-                        if (initialPos % 2 == 0 && getAt(initialPos - 1) != null) return@forEach
-                        // Add all the possible hallway values
-                        val rI = initialPos.toRoomType()!!.roomTypeToHallwayIndex()
-                        stoppableHallwayIndices.forEach { hI ->
-                            val steps = if (rI < hI) rI..hI else hI..rI
-                            if (steps.all { getAt(it) == null }) {
-                                // No obstructions, add it
-                                val multiplier = amphi.type.toMultiplier()
-                                val toExitRoom = if (initialPos % 2 == 0) 2 else 1 // TODO adapt
-                                val toTraverseHallway = steps.last - steps.first
-                                val cost = (toExitRoom + toTraverseHallway) * multiplier
-                                val newAmphis = initialAmphis
-                                    .filterNot { it == amphi }
-                                    .toMutableList().apply { add(amphi.copy(position = hI)) }
-
-                                add(newAmphis to cost)
-                            }
-                        }
-                    } else {
-                        // Add the move to room if it's possible
-                        val roomIndices = amphi.type.toTargetRoomIndices()
-                        val roomAvailable = roomIndices.map { getAt(it) }.all { it == null || it.type == amphi.type }
-                        val bottomAvailable = getAt(roomIndices.first + roomLength - 1) == null
-
-                        val rI = amphi.type.roomTypeToHallwayIndex()
-                        val steps = if (rI < initialPos) rI until initialPos else (initialPos + 1)..rI
-                        if (roomAvailable && steps.all { getAt(it) == null }) {
-                            // Available and no obstructions, add it // TODO adapt
-                            val restingPosition = if (bottomAvailable) roomIndices.first + roomLength - 1 else roomIndices.first
+                    val roomStart = typeToRoomI[roomIToType[amphi.position]]!!.first
+                    // Add all the possible hallway values
+                    val rI = roomIToType[initialPos]!!.roomTypeToHallwayIndex()
+                    stoppableHallwayIndices.mapNotNull { hI ->
+                        val steps = if (rI < hI) rI..hI else hI..rI
+                        if (steps.all { getAt(it) == null }) {
+                            // No obstructions
                             val multiplier = amphi.type.toMultiplier()
-                            val toEnterRoom = if (bottomAvailable) 2 else 1 // TODO adapt
-                            val toTraverseHallway = (steps.last - steps.first) + 1
-                            val cost = (toEnterRoom + toTraverseHallway) * multiplier
+                            val toExitRoom = initialPos - roomStart + 1
+                            val toTraverseHallway = steps.last - steps.first
+                            val cost = (toExitRoom + toTraverseHallway) * multiplier
                             val newAmphis = initialAmphis
                                 .filterNot { it == amphi }
-                                .toMutableList().apply { add(amphi.copy(position = restingPosition, isResting = true)) }
+                                .toMutableList().apply { add(amphi.copy(position = hI)) }
 
-                            add(newAmphis to cost)
-                        }
+                            newAmphis to cost
+                        } else null
                     }
                 }
             }
         }.map { (newAmphis, cost) -> Board(newAmphis, score + cost) }
 
+        private fun Int.isHallway() = this <= 10
         private fun Int.isRoom() = this > 10
 
         private fun Type.toMultiplier() = when (this) {
@@ -97,21 +119,6 @@ private class Day23 : Solution {
             Type.B -> 10
             Type.C -> 100
             Type.D -> 1000
-        }
-
-        private fun Int.toRoomType() = when (this) {
-            11, 12, 13, 14 -> Type.A
-            15, 16, 17, 18 -> Type.B
-            19, 20, 21, 22 -> Type.C
-            23, 24, 25, 26 -> Type.D
-            else -> null
-        }
-
-        private fun Type.toTargetRoomIndices() = when (this) {
-            Type.A -> 11..14
-            Type.B -> 15..18
-            Type.C -> 19..22
-            Type.D -> 23..26
         }
 
         private fun Type.roomTypeToHallwayIndex() = when (this) {
@@ -138,31 +145,31 @@ private class Day23 : Solution {
     override fun part1(input: List<String>): Any {
         val initialBoard = Board(
             amphis = listOf(
-                Amphi(Type.valueOf(input[2][3].toString()), 11, false),
-                Amphi(Type.valueOf(input[5][3].toString()), 12, input[5][3] == 'A'),
+                Amphi(Type.valueOf(input[2][3].toString()), 11),
+                Amphi(Type.valueOf(input[5][3].toString()), 12),
 
-                Amphi(Type.valueOf(input[2][5].toString()), 15, false),
-                Amphi(Type.valueOf(input[5][5].toString()), 16, input[5][5] == 'B'),
+                Amphi(Type.valueOf(input[2][5].toString()), 15),
+                Amphi(Type.valueOf(input[5][5].toString()), 16),
 
-                Amphi(Type.valueOf(input[2][7].toString()), 19, false),
-                Amphi(Type.valueOf(input[5][7].toString()), 20, input[5][7] == 'C'),
+                Amphi(Type.valueOf(input[2][7].toString()), 19),
+                Amphi(Type.valueOf(input[5][7].toString()), 20),
 
-                Amphi(Type.valueOf(input[2][9].toString()), 23, false),
-                Amphi(Type.valueOf(input[5][9].toString()), 24, input[5][9] == 'D'),
+                Amphi(Type.valueOf(input[2][9].toString()), 23),
+                Amphi(Type.valueOf(input[5][9].toString()), 24),
             ),
             score = 0
         )
 
+        // BFS traverse
         val queue = ArrayDeque<Board>().apply { add(initialBoard) }
         val explored = mutableSetOf(initialBoard)
         var minimumScore = Int.MAX_VALUE
-
         while (queue.isNotEmpty()) {
             val board = queue.removeFirst()
             when {
                 board.score > minimumScore -> continue
                 board.isWon() -> if (board.score < minimumScore) minimumScore = board.score
-                else -> board.nextBoards(board.score, 2).forEach { nextBoard ->
+                else -> board.nextBoards(board.score, false).forEach { nextBoard ->
                     if (nextBoard !in explored) {
                         explored.add(nextBoard)
                         queue.addLast(nextBoard)
@@ -175,7 +182,49 @@ private class Day23 : Solution {
     }
 
     override fun part2(input: List<String>): Any {
+        val initialBoard = Board(
+            amphis = listOf(
+                Amphi(Type.valueOf(input[2][3].toString()), 11),
+                Amphi(Type.valueOf(input[3][3].toString()), 12),
+                Amphi(Type.valueOf(input[4][3].toString()), 13),
+                Amphi(Type.valueOf(input[5][3].toString()), 14),
 
-        return 0
+                Amphi(Type.valueOf(input[2][5].toString()), 15),
+                Amphi(Type.valueOf(input[3][5].toString()), 16),
+                Amphi(Type.valueOf(input[4][5].toString()), 17),
+                Amphi(Type.valueOf(input[5][5].toString()), 18),
+
+                Amphi(Type.valueOf(input[2][7].toString()), 19),
+                Amphi(Type.valueOf(input[3][7].toString()), 20),
+                Amphi(Type.valueOf(input[4][7].toString()), 21),
+                Amphi(Type.valueOf(input[5][7].toString()), 22),
+
+                Amphi(Type.valueOf(input[2][9].toString()), 23),
+                Amphi(Type.valueOf(input[3][9].toString()), 24),
+                Amphi(Type.valueOf(input[4][9].toString()), 25),
+                Amphi(Type.valueOf(input[5][9].toString()), 26),
+            ),
+            score = 0
+        )
+
+        // BFS traverse
+        val queue = ArrayDeque<Board>().apply { add(initialBoard) }
+        val explored = mutableSetOf(initialBoard)
+        var minimumScore = Int.MAX_VALUE
+        while (queue.isNotEmpty()) {
+            val board = queue.removeFirst()
+            when {
+                board.score > minimumScore -> continue
+                board.isWon() -> if (board.score < minimumScore) minimumScore = board.score
+                else -> board.nextBoards(board.score, true).forEach { nextBoard ->
+                    if (nextBoard !in explored) {
+                        explored.add(nextBoard)
+                        queue.addLast(nextBoard)
+                    }
+                }
+            }
+        }
+
+        return minimumScore
     }
 }
