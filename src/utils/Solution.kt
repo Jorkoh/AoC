@@ -36,5 +36,9 @@ interface Solution {
         println("[${if (result == expected) "PASS" else "FAIL"}] TEST: $result\tEXPECTED: $expected\t")
     }
 
+    fun test(part: (List<String>) -> Any, expected: Any, input: String) {
+        test(part, expected, listOf(input))
+    }
+
     private fun readInput(name: String) = File("src", "$name.txt").readLines()
 }
