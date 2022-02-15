@@ -5,8 +5,8 @@ import java.util.*
 
 fun main() {
     with(Day15()) {
-        test(::part1, 40)
-        test(::part2, 315)
+        testFile(::part1, 40)
+        testFile(::part2, 315)
         solve()
     }
 }

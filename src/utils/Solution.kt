@@ -26,8 +26,13 @@ interface Solution {
         println("PART 2:\t${part2Result.value}\t[${part2Result.duration}]")
     }
 
-    fun test(part: (List<String>) -> Any, expected: Any, fileName: String = "test") {
+    fun testFile(part: (List<String>) -> Any, expected: Any, fileName: String = "test") {
         val result = part(readInput("year$year/day$dayString/$fileName"))
+        println("[${if (result == expected) "PASS" else "FAIL"}] TEST: $result\tEXPECTED: $expected\t")
+    }
+
+    fun test(part: (List<String>) -> Any, expected: Any, input: List<String>) {
+        val result = part(input)
         println("[${if (result == expected) "PASS" else "FAIL"}] TEST: $result\tEXPECTED: $expected\t")
     }
 

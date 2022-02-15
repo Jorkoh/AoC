@@ -4,12 +4,12 @@ import utils.Solution
 
 fun main() {
     with(Day12()) {
-        test(::part1, 10, "test1")
-        test(::part1, 19, "test2")
-        test(::part1, 226, "test3")
-        test(::part2, 36, "test1")
-        test(::part2, 103, "test2")
-        test(::part2, 3509, "test3")
+        testFile(::part1, 10, "test1")
+        testFile(::part1, 19, "test2")
+        testFile(::part1, 226, "test3")
+        testFile(::part2, 36, "test1")
+        testFile(::part2, 103, "test2")
+        testFile(::part2, 3509, "test3")
         solve()
     }
 }

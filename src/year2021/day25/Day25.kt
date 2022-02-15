@@ -4,7 +4,7 @@ import utils.Solution
 
 fun main() {
     with(Day25()) {
-        test(::part1, 58)
+        testFile(::part1, 58)
         solve()
     }
 }

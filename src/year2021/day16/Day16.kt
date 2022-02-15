@@ -6,8 +6,8 @@ import year2021.day16.Day16.PacketType.Companion.toPacketType
 
 fun main() {
     with(Day16()) {
-        test(::part1Test, listOf(16, 12, 23, 31), "test1")
-        test(::part2Test, listOf(3L, 54L, 7L, 9L, 1L, 0L, 0L, 1L), "test2")
+        testFile(::part1Test, listOf(16, 12, 23, 31), "test1")
+        testFile(::part2Test, listOf(3L, 54L, 7L, 9L, 1L, 0L, 0L, 1L), "test2")
         solve()
     }
 }

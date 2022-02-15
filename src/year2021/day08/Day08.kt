@@ -5,8 +5,8 @@ import kotlin.math.pow
 
 fun main() {
     with(Day08()) {
-        test(::part1, 26)
-        test(::part2, 61229)
+        testFile(::part1, 26)
+        testFile(::part2, 61229)
         solve()
     }
 }

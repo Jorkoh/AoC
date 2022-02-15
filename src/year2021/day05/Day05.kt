@@ -4,8 +4,8 @@ import utils.Solution
 
 fun main() {
     with(Day05()) {
-        test(::part1, 5)
-        test(::part2, 12)
+        testFile(::part1, 5)
+        testFile(::part2, 12)
         solve()
     }
 }

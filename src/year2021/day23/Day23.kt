@@ -5,8 +5,8 @@ import java.util.*
 
 fun main() {
     with(Day23()) {
-        test(::part1, 12521)
-        test(::part2, 44169)
+        testFile(::part1, 12521)
+        testFile(::part2, 44169)
         solve()
     }
 }

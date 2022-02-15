@@ -5,9 +5,9 @@ import utils.Solution
 
 fun main() {
     with(Day04()) {
-        test(::part1, 2, "test1")
-        test(::part2, 0, "test2")
-        test(::part2, 4, "test3")
+        testFile(::part1, 2, "test1")
+        testFile(::part2, 0, "test2")
+        testFile(::part2, 4, "test3")
         solve()
     }
 }

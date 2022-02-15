@@ -5,8 +5,8 @@ import java.lang.Long.max
 
 fun main() {
     with(Day21()) {
-        test(::part1, 739785)
-        test(::part2, 444356092776315L)
+        testFile(::part1, 739785)
+        testFile(::part2, 444356092776315L)
         solve()
     }
 }

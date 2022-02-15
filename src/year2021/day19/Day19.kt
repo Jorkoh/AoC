@@ -5,8 +5,8 @@ import kotlin.math.abs
 
 fun main() {
     with(Day19()) {
-        test(::part1, 79)
-        test(::part2, 3621)
+        testFile(::part1, 79)
+        testFile(::part2, 3621)
         solve()
     }
 }

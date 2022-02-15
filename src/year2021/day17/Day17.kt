@@ -6,8 +6,8 @@ import kotlin.math.sign
 
 fun main() {
     with(Day17()) {
-        test(::part1, 45)
-        test(::part2, 112)
+        testFile(::part1, 45)
+        testFile(::part2, 112)
         solve()
     }
 }

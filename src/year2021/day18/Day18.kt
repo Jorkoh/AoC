@@ -6,8 +6,8 @@ import kotlin.math.floor
 
 fun main() {
     with(Day18()) {
-        test(::part1, 4140)
-        test(::part2, 3993)
+        testFile(::part1, 4140)
+        testFile(::part2, 3993)
         solve()
     }
 }
