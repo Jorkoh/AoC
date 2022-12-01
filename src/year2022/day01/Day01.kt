@@ -7,6 +7,7 @@ fun main() {
         testFile(::part1, 24000)
         testFile(::part2, 45000)
         solve()
+        benchmark()
     }
 }
 

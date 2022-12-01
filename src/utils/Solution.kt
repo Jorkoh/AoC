@@ -2,6 +2,7 @@ package utils
 
 import java.io.File
 import kotlin.time.ExperimentalTime
+import kotlin.time.measureTime
 import kotlin.time.measureTimedValue
 
 interface Solution {
@@ -24,6 +25,18 @@ interface Solution {
         println("\nYear $year, day $day")
         println("PART 1:\t${part1Result.value}\t[${part1Result.duration}]")
         println("PART 2:\t${part2Result.value}\t[${part2Result.duration}]")
+    }
+
+    @OptIn(ExperimentalTime::class)
+    fun benchmark(runs: Int = 100) {
+        val input = readInput("year$year/day$dayString/input")
+
+        val part1 = measureTime { repeat(runs) { part1(input) } } / runs
+        val part2 = measureTime { repeat(runs) { part2(input) } } / runs
+
+        println("\nBENCHMARK")
+        println("PART 1:\t${part1}")
+        println("PART 2:\t${part2}")
     }
 
     fun testFile(part: (List<String>) -> Any, expected: Any, fileName: String = "test") {
