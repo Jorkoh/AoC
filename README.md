@@ -13,4 +13,5 @@ Dump of my [AoC](https://adventofcode.com) solutions as I work through the list 
 <a href="https://adventofcode.com/2018"><img src="https://img.shields.io/endpoint?color=gold&label=2018%20%E2%AD%90&url=https%3A%2F%2Fapi.brendan.ie%2Faoc%2Fget%2F1051268%2F2018" alt="2018 stars" /></a>&nbsp;&nbsp;&nbsp;
 <a href="https://adventofcode.com/2019"><img src="https://img.shields.io/endpoint?color=gold&label=2019%20%E2%AD%90&url=https%3A%2F%2Fapi.brendan.ie%2Faoc%2Fget%2F1051268%2F2019" alt="2019 stars" /></a>&nbsp;&nbsp;&nbsp;
 <a href="https://adventofcode.com/2020"><img src="https://img.shields.io/endpoint?color=gold&label=2020%20%E2%AD%90&url=https%3A%2F%2Fapi.brendan.ie%2Faoc%2Fget%2F1051268%2F2020" alt="2020 stars" /></a>&nbsp;&nbsp;&nbsp;
-<a href="https://adventofcode.com/2021"><img src="https://img.shields.io/endpoint?color=gold&label=2021%20%E2%AD%90&url=https%3A%2F%2Fapi.brendan.ie%2Faoc%2Fget%2F1051268%2F2021" alt="2021 stars" /></a>
+<a href="https://adventofcode.com/2021"><img src="https://img.shields.io/endpoint?color=gold&label=2021%20%E2%AD%90&url=https%3A%2F%2Fapi.brendan.ie%2Faoc%2Fget%2F1051268%2F2021" alt="2021 stars" /></a>&nbsp;&nbsp;&nbsp;
+<a href="https://adventofcode.com/2022"><img src="https://img.shields.io/endpoint?color=gold&label=2022%20%E2%AD%90&url=https%3A%2F%2Fapi.brendan.ie%2Faoc%2Fget%2F1051268%2F2022" alt="2022 stars" /></a>
