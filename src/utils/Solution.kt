@@ -28,10 +28,12 @@ interface Solution {
     }
 
     @OptIn(ExperimentalTime::class)
-    fun benchmark(runs: Int = 100) {
+    fun benchmark(runs: Int = 50, preRuns: Int = 300) {
         val input = readInput("year$year/day$dayString/input")
 
+        repeat(preRuns) { part1(input) }
         val part1 = measureTime { repeat(runs) { part1(input) } } / runs
+        repeat(preRuns) { part2(input) }
         val part2 = measureTime { repeat(runs) { part2(input) } } / runs
 
         println("\nBENCHMARK")
