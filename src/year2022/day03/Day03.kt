@@ -16,9 +16,8 @@ private class Day03 : Solution {
 
     override fun part1(input: List<String>): Any {
         return input.sumOf { l ->
-            val firstHalf = l.take(l.length / 2)
-            val secondHalf = l.takeLast(l.length / 2)
-            firstHalf.first { it in secondHalf }.asPriority()
+            val (first, second) = l.chunked(l.length / 2)
+            first.first { it in second }.asPriority()
         }
     }
 
