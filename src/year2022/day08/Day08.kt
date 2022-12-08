@@ -19,16 +19,8 @@ private class Day08 : Solution {
     enum class Direction { Left, Right, Top, Bottom }
 
     override fun part1(input: List<String>): Any {
-        val fromLeft = input.isVisible(Left)
-        val fromRight = input.isVisible(Right)
-        val fromTop = input.isVisible(Top)
-        val fromBottom = input.isVisible(Bottom)
-
-        return input.indices.sumOf { i ->
-            input.indices.count { j ->
-                fromLeft[i][j] || fromRight[i][j] || fromTop[i][j] || fromBottom[i][j]
-            }
-        }
+        val visibilities = Direction.values().map { dir -> input.isVisible(dir) }
+        return input.indices.sumOf { i -> input.indices.count { j -> visibilities.any { it[i][j] } } }
     }
 
     private fun List<String>.isVisible(from: Direction): List<List<Boolean>> {
@@ -51,14 +43,10 @@ private class Day08 : Solution {
     }
 
     override fun part2(input: List<String>): Any {
-        val towardsLeft = input.visionRange(Left)
-        val towardsRight = input.visionRange(Right)
-        val towardsTop = input.visionRange(Top)
-        val towardsBottom = input.visionRange(Bottom)
-
+        val visionRanges = Direction.values().map { dir -> input.visionRange(dir) }
         return input.indices.maxOf { i ->
             input.indices.maxOf { j ->
-                towardsLeft[i][j] * towardsRight[i][j] * towardsTop[i][j] * towardsBottom[i][j]
+                visionRanges.fold(1) { acc, vr -> acc * vr[i][j] }
             }
         }
     }
