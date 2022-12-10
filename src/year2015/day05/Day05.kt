@@ -19,11 +19,11 @@ fun main() {
     }
 }
 
-private class Day05 : Solution {
+class Day05 : Solution() {
     override val day = 5
     override val year = 2015
 
-    override fun part1(input: List<String>): Any {
+    override fun part1(): Any {
         val vowels = setOf('a', 'e', 'i', 'o', 'u')
         val dangerous = setOf('a', 'c', 'p', 'x')
 
@@ -50,7 +50,7 @@ private class Day05 : Solution {
         }
     }
 
-    override fun part2(input: List<String>): Any {
+    override fun part2(): Any {
         return input.count { s ->
             var previousPair: Pair<Char, Char>? = null
             val pairs = mutableSetOf<Pair<Char, Char>>()

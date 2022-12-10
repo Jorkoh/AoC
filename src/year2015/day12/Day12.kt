@@ -22,11 +22,11 @@ fun main() {
     }
 }
 
-private class Day12 : Solution {
+class Day12 : Solution() {
     override val day = 12
     override val year = 2015
 
-    override fun part1(input: List<String>): Any {
+    override fun part1(): Any {
         val s = input.first()
         var total = 0
         var i = 0
@@ -49,7 +49,7 @@ private class Day12 : Solution {
     }
 
     // This would have been way easier by parsing it as a tree first but this is "one pass"
-    override fun part2(input: List<String>): Any {
+    override fun part2(): Any {
         val s = input.first()
         val tokens = ArrayDeque<Token>()
         var i = 0

@@ -9,11 +9,11 @@ fun main() {
     }
 }
 
-private class Day25 : Solution {
+class Day25 : Solution() {
     override val day = 25
     override val year = 2021
 
-    override fun part1(input: List<String>): Any {
+    override fun part1(): Any {
         var map = input
         val w = map.first().length
         val h = map.size
@@ -45,7 +45,7 @@ private class Day25 : Solution {
         return moves
     }
 
-    override fun part2(input: List<String>): Any {
+    override fun part2(): Any {
         return 0
     }
 }

@@ -10,17 +10,17 @@ fun main() {
     }
 }
 
-private class Day06 : Solution {
+class Day06 : Solution() {
     override val day = 6
     override val year = 2020
 
-    override fun part1(input: List<String>): Any {
+    override fun part1(): Any {
         return input.joinToString("\n").split("\n\n").sumOf { group ->
             group.toSet().filter { it.isLetter() }.size
         }
     }
 
-    override fun part2(input: List<String>): Any {
+    override fun part2(): Any {
         return input.joinToString("\n").split("\n\n").sumOf { group ->
             group.groupingBy { it }.eachCount().count { it.value == group.count { letter -> letter == '\n' } + 1 }
         }

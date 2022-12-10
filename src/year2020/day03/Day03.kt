@@ -10,11 +10,11 @@ fun main() {
     }
 }
 
-private class Day03 : Solution {
+class Day03 : Solution() {
     override val day = 3
     override val year = 2020
 
-    override fun part1(input: List<String>): Any {
+    override fun part1(): Any {
         val slopeX = 3
         val slopeY = 1
 
@@ -23,7 +23,7 @@ private class Day03 : Solution {
         }
     }
 
-    override fun part2(input: List<String>): Any {
+    override fun part2(): Any {
         val slopesXY = listOf(1 to 1, 3 to 1, 5 to 1, 7 to 1, 1 to 2)
 
         return slopesXY.fold(1L) { acc, (slopeX, slopeY) ->

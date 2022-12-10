@@ -8,11 +8,11 @@ fun main() {
     }
 }
 
-private class Day07 : Solution {
+class Day07 : Solution() {
     override val day = 7
     override val year = 2015
 
-    override fun part1(input: List<String>): Any {
+    override fun part1(): Any {
         val instructions = input.parseInstructions()
         val signals = mutableMapOf<String, UShort>()
 
@@ -20,7 +20,7 @@ private class Day07 : Solution {
     }
 
 
-    override fun part2(input: List<String>): Any {
+    override fun part2(): Any {
         val instructions = input.parseInstructions()
         val signals = mutableMapOf<String, UShort>()
 

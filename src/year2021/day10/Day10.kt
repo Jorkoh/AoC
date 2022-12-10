@@ -10,14 +10,14 @@ fun main() {
     }
 }
 
-private class Day10 : Solution {
+class Day10 : Solution() {
     override val day = 10
     override val year = 2021
 
     private val closeToOpen = mapOf(')' to '(', ']' to '[', '}' to '{', '>' to '<')
     private val scores = mapOf(')' to 3, ']' to 57, '}' to 1197, '>' to 25137, '(' to 1, '[' to 2, '{' to 3, '<' to 4)
 
-    override fun part1(input: List<String>): Int {
+    override fun part1(): Int {
         return input.sumOf { line ->
             line.fold(ArrayDeque<Char>()) { stack, c ->
                 when {
@@ -30,7 +30,7 @@ private class Day10 : Solution {
         }
     }
 
-    override fun part2(input: List<String>): Long {
+    override fun part2(): Long {
         return input.mapNotNull { line ->
             line.fold(ArrayDeque<Char>()) { stack, c ->
                 when {

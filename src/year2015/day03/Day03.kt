@@ -16,11 +16,11 @@ fun main() {
     }
 }
 
-private class Day03 : Solution {
+class Day03 : Solution() {
     override val day = 3
     override val year = 2015
 
-    override fun part1(input: List<String>): Any {
+    override fun part1(): Any {
         var x = 0
         var y = 0
         val visited = mutableSetOf(x to y)
@@ -38,7 +38,7 @@ private class Day03 : Solution {
         return visited.size
     }
 
-    override fun part2(input: List<String>): Any {
+    override fun part2(): Any {
         var xSanta = 0
         var ySanta = 0
         var xRobo = 0

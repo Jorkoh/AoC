@@ -11,11 +11,11 @@ fun main() {
     }
 }
 
-private class Day07 : Solution {
+class Day07 : Solution() {
     override val day = 7
     override val year = 2021
 
-    override fun part1(input: List<String>): Int {
+    override fun part1(): Int {
         val positions = input.first().split(',').map { it.toInt() }.sorted()
 
         // Optimally use the median as target
@@ -24,7 +24,7 @@ private class Day07 : Solution {
         }
     }
 
-    override fun part2(input: List<String>): Int {
+    override fun part2(): Int {
         val positions = input.first().split(',').map { it.toInt() }.sorted()
 
         // Optimally use the mean, mean-1 and mean +1 as targets

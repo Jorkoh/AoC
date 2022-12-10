@@ -10,15 +10,15 @@ fun main() {
     }
 }
 
-private class Day01 : Solution {
+class Day01 : Solution() {
     override val day = 1
     override val year = 2021
 
-    override fun part1(input: List<String>): Int {
+    override fun part1(): Int {
         return input.map { it.toInt() }.windowed(2).count { it.last() > it.first() }
     }
 
-    override fun part2(input: List<String>): Int {
+    override fun part2(): Int {
         return input.map { it.toInt() }.windowed(4).count { it.last() > it.first() }
     }
 }

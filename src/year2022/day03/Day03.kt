@@ -10,18 +10,18 @@ fun main() {
     }
 }
 
-private class Day03 : Solution {
+class Day03 : Solution() {
     override val day = 3
     override val year = 2022
 
-    override fun part1(input: List<String>): Any {
+    override fun part1(): Any {
         return input.sumOf { l ->
             val (first, second) = l.chunked(l.length / 2)
             first.first { it in second }.asPriority()
         }
     }
 
-    override fun part2(input: List<String>): Any {
+    override fun part2(): Any {
         return input.windowed(3, 3) { elves ->
             elves[0].first { it in elves[1] && it in elves[2] }.asPriority()
         }.sum()

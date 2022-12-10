@@ -12,13 +12,13 @@ fun main() {
     }
 }
 
-private class Day17 : Solution {
+class Day17 : Solution() {
     override val day = 17
     override val year = 2015
 
     var target = 150
 
-    override fun part1(input: List<String>): Any {
+    override fun part1(): Any {
         val containers = input.map(String::toInt).sortedDescending()
 
         return sumCombinations(containers, target)
@@ -39,7 +39,7 @@ private class Day17 : Solution {
         }
     }
 
-    override fun part2(input: List<String>): Any {
+    override fun part2(): Any {
         val containers = input.map(String::toInt).sortedDescending()
 
         val state = State()

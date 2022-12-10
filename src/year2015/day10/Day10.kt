@@ -8,11 +8,11 @@ fun main() {
     }
 }
 
-private class Day10 : Solution {
+class Day10 : Solution() {
     override val day = 10
     override val year = 2015
 
-    override fun part1(input: List<String>): Any {
+    override fun part1(): Any {
         var line = input.first()
 
         repeat(40) { line = lookAndSay(line) }
@@ -20,7 +20,7 @@ private class Day10 : Solution {
         return line.length
     }
 
-    override fun part2(input: List<String>): Any {
+    override fun part2(): Any {
         var line = input.first()
 
         repeat(50) { line = lookAndSay(line) }

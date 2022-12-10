@@ -12,11 +12,11 @@ fun main() {
     }
 }
 
-private class Day11 : Solution {
+class Day11 : Solution() {
     override val day = 11
     override val year = 2021
 
-    override fun part1(input: List<String>): Int {
+    override fun part1(): Int {
         val grid = input.toIntGrid()
         var flashes = 0
 
@@ -28,7 +28,7 @@ private class Day11 : Solution {
         return flashes
     }
 
-    override fun part2(input: List<String>): Int {
+    override fun part2(): Int {
         val grid = input.toIntGrid()
 
         repeat(1000) { step ->

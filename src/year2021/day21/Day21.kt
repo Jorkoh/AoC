@@ -11,11 +11,11 @@ fun main() {
     }
 }
 
-private class Day21 : Solution {
+class Day21 : Solution() {
     override val day = 21
     override val year = 2021
 
-    override fun part1(input: List<String>): Any {
+    override fun part1(): Any {
         var position1 = input[0].substringAfter("position: ").toInt()
         var position2 = input[1].substringAfter("position: ").toInt()
         var score1 = 0
@@ -52,7 +52,7 @@ private class Day21 : Solution {
 
     data class BoardState(val score1: Int, val score2: Int, val position1: Int, val position2: Int, val turn: Int)
 
-    override fun part2(input: List<String>): Any {
+    override fun part2(): Any {
         val rollsToFrequency = listOf(3 to 1L, 4 to 3L, 5 to 6L, 6 to 7L, 7 to 6L, 8 to 3L, 9 to 1L)
         var wins1 = 0L
         var wins2 = 0L

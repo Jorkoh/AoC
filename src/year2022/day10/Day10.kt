@@ -13,7 +13,7 @@ fun main() {
     }
 }
 
-private class Day10 : Solution {
+class Day10 : Solution() {
     override val day = 10
     override val year = 2022
 
@@ -21,7 +21,7 @@ private class Day10 : Solution {
         NOOP(1), ADDX(2)
     }
 
-    override fun part1(input: List<String>): Any {
+    override fun part1(): Any {
         var register = 1
         var cycle = 0
         var result = 0
@@ -40,7 +40,7 @@ private class Day10 : Solution {
         return result
     }
 
-    override fun part2(input: List<String>): Any {
+    override fun part2(): Any {
         var register = 1
         var cycle = 0
         val result = MutableList(6) { MutableList(40) { ' ' } }

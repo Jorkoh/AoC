@@ -10,7 +10,7 @@ fun main() {
     }
 }
 
-private class Day22 : Solution {
+class Day22 : Solution() {
     override val day = 22
     override val year = 2021
 
@@ -32,7 +32,7 @@ private class Day22 : Solution {
     private infix fun Cuboid.overlaps(that: Cuboid) =
         x overlaps that.x && y overlaps that.y && z overlaps that.z
 
-    override fun part1(input: List<String>): Any {
+    override fun part1(): Any {
         val operations = input.map { line ->
             val (operationString, rangesString) = line.split(' ')
             val type = if (operationString[1] == 'n') OperationType.On else OperationType.Off
@@ -61,7 +61,7 @@ private class Day22 : Solution {
         return cubes.sumOf { column -> column.sumOf { row -> row.count { it } } }
     }
 
-    override fun part2(input: List<String>): Any {
+    override fun part2(): Any {
         val operations = input.map { line ->
             val (operationString, rangesString) = line.split(' ')
             val type = if (operationString[1] == 'n') OperationType.On else OperationType.Off

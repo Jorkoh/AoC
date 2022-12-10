@@ -12,20 +12,20 @@ fun main() {
     }
 }
 
-private class Day16 : Solution {
+class Day16 : Solution() {
     override val day = 16
     override val year = 2021
 
     private val versions = mutableListOf<Int>()
 
-    override fun part1(input: List<String>): Any {
+    override fun part1(): Any {
         val reader = Reader(input.first().hexToBin())
         versions.clear()
         processPacket(reader)
         return versions.sum()
     }
 
-    fun part1Test(input: List<String>): Any {
+    fun part1Test(): Any {
         return input.map {
             val reader = Reader(it.hexToBin())
             versions.clear()
@@ -34,12 +34,12 @@ private class Day16 : Solution {
         }
     }
 
-    override fun part2(input: List<String>): Any {
+    override fun part2(): Any {
         val reader = Reader(input.first().hexToBin())
         return processPacket(reader)
     }
 
-    fun part2Test(input: List<String>): Any {
+    fun part2Test(): Any {
         return input.map {
             val reader = Reader(it.hexToBin())
             processPacket(reader)

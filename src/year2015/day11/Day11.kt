@@ -10,11 +10,11 @@ fun main() {
     }
 }
 
-private class Day11 : Solution {
+class Day11 : Solution() {
     override val day = 11
     override val year = 2015
 
-    override fun part1(input: List<String>): Any {
+    override fun part1(): Any {
         val password = Password(input.first())
 
         do {
@@ -24,7 +24,7 @@ private class Day11 : Solution {
         return password.toString()
     }
 
-    override fun part2(input: List<String>): Any {
+    override fun part2(): Any {
         val password = Password(input.first())
 
         repeat(2) {

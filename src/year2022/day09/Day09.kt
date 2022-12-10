@@ -13,7 +13,7 @@ fun main() {
     }
 }
 
-private class Day09 : Solution {
+class Day09 : Solution() {
     override val day = 9
     override val year = 2022
 
@@ -57,7 +57,7 @@ private class Day09 : Solution {
     private enum class Direction { Up, Down, Left, Right }
     private data class Position(val x: Int, val y: Int)
 
-    override fun part1(input: List<String>): Any {
+    override fun part1(): Any {
         val rope = Rope(2)
         input.forEach { l ->
             rope.move(
@@ -68,7 +68,7 @@ private class Day09 : Solution {
         return rope.tailVisited.size
     }
 
-    override fun part2(input: List<String>): Any {
+    override fun part2(): Any {
         val rope = Rope(10)
         input.forEach { l ->
             rope.move(

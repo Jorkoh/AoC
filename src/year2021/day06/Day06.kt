@@ -10,11 +10,11 @@ fun main() {
     }
 }
 
-private class Day06 : Solution {
+class Day06 : Solution() {
     override val day = 6
     override val year = 2021
 
-    override fun part1(input: List<String>): Long {
+    override fun part1(): Long {
         var fish = LongArray(9)
         input.first().split(',').forEach { fish[it.toInt()]++ }
 
@@ -25,7 +25,7 @@ private class Day06 : Solution {
         return fish.sum()
     }
 
-    override fun part2(input: List<String>): Long {
+    override fun part2(): Long {
         var fish = LongArray(9)
         input.first().split(',').forEach { fish[it.toInt()]++ }
 

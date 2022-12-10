@@ -10,11 +10,11 @@ fun main() {
     }
 }
 
-private class Day09 : Solution {
+class Day09 : Solution() {
     override val day = 9
     override val year = 2021
 
-    override fun part1(input: List<String>): Int {
+    override fun part1(): Int {
         val grid = input.map { it.map(Char::digitToInt) }
 
         var result = 0
@@ -27,7 +27,7 @@ private class Day09 : Solution {
         return result
     }
 
-    override fun part2(input: List<String>): Int {
+    override fun part2(): Int {
         val grid = input.map { it.map(Char::digitToInt) }
 
         val basins = mutableListOf<MutableSet<Pair<Int, Int>>>()

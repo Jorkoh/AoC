@@ -1,26 +1,26 @@
 package utils
 
+import kotlinx.benchmark.Setup
 import java.io.File
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTime
 import kotlin.time.measureTimedValue
 
-interface Solution {
-    val day: Int
-    val year: Int
+abstract class Solution {
+    abstract val day: Int
+    abstract val year: Int
 
-    val dayString
-        get() = day.toString().padStart(2, '0')
+    var input: List<String> = emptyList()
+        private set
 
-    fun part1(input: List<String>): Any
-    fun part2(input: List<String>): Any
+    abstract fun part1(): Any
+    abstract fun part2(): Any
 
     @OptIn(ExperimentalTime::class)
     fun solve() {
-        val input = readInput("year$year/day$dayString/input")
-
-        val part1Result = measureTimedValue { part1(input) }
-        val part2Result = measureTimedValue { part2(input) }
+        setupInputFromFilename()
+        val part1Result = measureTimedValue { part1() }
+        val part2Result = measureTimedValue { part2() }
 
         println("\nYear $year, day $day")
         println("PART 1:\t${part1Result.value}\t[${part1Result.duration}]")
@@ -29,31 +29,40 @@ interface Solution {
 
     @OptIn(ExperimentalTime::class)
     fun benchmark(runs: Int = 50, preRuns: Int = 300) {
-        val input = readInput("year$year/day$dayString/input")
-
-        repeat(preRuns) { part1(input) }
-        val part1 = measureTime { repeat(runs) { part1(input) } } / runs
-        repeat(preRuns) { part2(input) }
-        val part2 = measureTime { repeat(runs) { part2(input) } } / runs
+        setupInputFromFilename()
+        repeat(preRuns) { part1() }
+        val part1 = measureTime { repeat(runs) { part1() } } / runs
+        repeat(preRuns) { part2() }
+        val part2 = measureTime { repeat(runs) { part2() } } / runs
 
         println("\nBENCHMARK")
         println("PART 1:\t${part1}")
         println("PART 2:\t${part2}")
     }
 
-    fun testFile(part: (List<String>) -> Any, expected: Any, fileName: String = "test") {
-        val result = part(readInput("year$year/day$dayString/$fileName"))
+    fun testFile(part: () -> Any, expected: Any, filename: String = "test") {
+        setupInputFromFilename(filename)
+        val result = part()
         println("[${if (result == expected) "PASS" else "FAIL"}] TEST: $result\tEXPECTED: $expected\t")
     }
 
-    fun test(part: (List<String>) -> Any, expected: Any, input: List<String>) {
-        val result = part(input)
+    fun test(part: () -> Any, expected: Any, input: List<String>) {
+        this.input = input
+        val result = part()
         println("[${if (result == expected) "PASS" else "FAIL"}] TEST: $result\tEXPECTED: $expected\t")
     }
 
-    fun test(part: (List<String>) -> Any, expected: Any, input: String) {
+    fun test(part: () -> Any, expected: Any, input: String) {
         test(part, expected, listOf(input))
     }
 
-    private fun readInput(name: String) = File("src", "$name.txt").readLines()
+    private fun setupInputFromFilename(name: String = "input") {
+        val dayString = day.toString().padStart(2, '0')
+        input = File("src", "year$year/day$dayString/$name.txt").readLines()
+    }
+
+    @Setup
+    fun setupBenchmark() {
+        setupInputFromFilename()
+    }
 }

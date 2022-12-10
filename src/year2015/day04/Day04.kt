@@ -12,7 +12,7 @@ fun main() {
     }
 }
 
-private class Day04 : Solution {
+class Day04 : Solution() {
     override val day = 4
     override val year = 2015
 
@@ -20,7 +20,7 @@ private class Day04 : Solution {
         val md: MessageDigest = MessageDigest.getInstance("MD5")
     }
 
-    override fun part1(input: List<String>): Any {
+    override fun part1(): Any {
         val secret = input.first()
         var answer = 1
 
@@ -33,7 +33,7 @@ private class Day04 : Solution {
         return answer
     }
 
-    override fun part2(input: List<String>): Any {
+    override fun part2(): Any {
         val secret = input.first()
         var answer = 1
 

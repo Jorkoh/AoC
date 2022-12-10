@@ -10,11 +10,11 @@ fun main() {
     }
 }
 
-private class Day02 : Solution {
+class Day02 : Solution() {
     override val day = 2
     override val year = 2021
 
-    override fun part1(input: List<String>): Int {
+    override fun part1(): Int {
         var horizontal = 0
         var depth = 0
 
@@ -30,7 +30,7 @@ private class Day02 : Solution {
         return horizontal * depth
     }
 
-    override fun part2(input: List<String>): Int {
+    override fun part2(): Int {
         var horizontal = 0
         var depth = 0
         var aim = 0

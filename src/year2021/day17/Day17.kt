@@ -12,11 +12,11 @@ fun main() {
     }
 }
 
-private class Day17 : Solution {
+class Day17 : Solution() {
     override val day = 17
     override val year = 2021
 
-    override fun part1(input: List<String>): Any {
+    override fun part1(): Any {
         val targetX = input.first()
             .substringBefore(',')
             .substringAfter('=')
@@ -59,7 +59,7 @@ private class Day17 : Solution {
         }
     }
 
-    override fun part2(input: List<String>): Any {
+    override fun part2(): Any {
         val targetX = input.first()
             .substringBefore(',')
             .substringAfter('=')

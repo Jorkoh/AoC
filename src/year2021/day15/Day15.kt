@@ -11,11 +11,11 @@ fun main() {
     }
 }
 
-private class Day15 : Solution {
+class Day15 : Solution() {
     override val day = 15
     override val year = 2021
 
-    override fun part1(input: List<String>): Any {
+    override fun part1(): Any {
         val map = input.map { it.map(Char::digitToInt) }
         val mapW = input.last().length
         val mapH = input.size
@@ -44,7 +44,7 @@ private class Day15 : Solution {
         return costSoFar[end]!!
     }
 
-    override fun part2(input: List<String>): Any {
+    override fun part2(): Any {
         val map = input.map { it.map(Char::digitToInt) }
         val mapW = input.last().length
         val mapH = input.size

@@ -10,11 +10,11 @@ fun main() {
     }
 }
 
-private class Day04 : Solution {
+class Day04 : Solution() {
     override val day = 4
     override val year = 2021
 
-    override fun part1(input: List<String>): Int {
+    override fun part1(): Int {
         val drawNumbers = input.first().split(",").map { it.toInt() }
         val boards = input.drop(2).windowed(5, 6).map { boardLines ->
             Board(boardLines.flatMap { line -> line.split(" ").mapNotNull { it.toIntOrNull() } })
@@ -28,7 +28,7 @@ private class Day04 : Solution {
         return -1
     }
 
-    override fun part2(input: List<String>): Int {
+    override fun part2(): Int {
         val drawNumbers = input.first().split(",").map { it.toInt() }
         val boards = input.drop(2).windowed(5, 6).map { boardLines ->
             Board(boardLines.flatMap { line -> line.split(" ").mapNotNull { it.toIntOrNull() } })

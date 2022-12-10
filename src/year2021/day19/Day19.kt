@@ -11,7 +11,7 @@ fun main() {
     }
 }
 
-private class Day19 : Solution {
+class Day19 : Solution() {
     override val day = 19
     override val year = 2021
 
@@ -135,7 +135,7 @@ private class Day19 : Solution {
         return readingsRelativeToFirst to scanners
     }
 
-    override fun part1(input: List<String>): Any {
+    override fun part1(): Any {
         val readings = commonParseReadings(input)
 
         val (readingsRelativeToFirst, _) = commonSolve(readings)
@@ -143,7 +143,7 @@ private class Day19 : Solution {
         return readingsRelativeToFirst.flatMap { it.second }.distinct().size
     }
 
-    override fun part2(input: List<String>): Any {
+    override fun part2(): Any {
         val readings = commonParseReadings(input)
 
         val (_, scanners) = commonSolve(readings)

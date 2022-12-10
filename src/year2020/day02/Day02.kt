@@ -10,11 +10,11 @@ fun main() {
     }
 }
 
-private class Day02 : Solution {
+class Day02 : Solution() {
     override val day = 2
     override val year = 2020
 
-    override fun part1(input: List<String>): Int {
+    override fun part1(): Int {
         return input.count { line ->
             val (range, letter, password) = line.split(' ')
             val (min, max) = range.split('-').map { it.toInt() }
@@ -23,7 +23,7 @@ private class Day02 : Solution {
         }
     }
 
-    override fun part2(input: List<String>): Int {
+    override fun part2(): Int {
         return input.count { line ->
             val (positions, letter, password) = line.split(' ')
             val (first, second) = positions.split('-').map { it.toInt() - 1 }

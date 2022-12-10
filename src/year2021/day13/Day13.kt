@@ -9,11 +9,11 @@ fun main() {
     }
 }
 
-private class Day13 : Solution {
+class Day13 : Solution() {
     override val day = 13
     override val year = 2021
 
-    override fun part1(input: List<String>): Any {
+    override fun part1(): Any {
         val initialPoints = input.takeWhile(String::isNotBlank).map { line ->
             line.split(',').map { it.toInt() }.let { it[0] to it[1] }
         }
@@ -37,7 +37,7 @@ private class Day13 : Solution {
         X, Y
     }
 
-    override fun part2(input: List<String>): Any {
+    override fun part2(): Any {
         val initialPoints = input.takeWhile(String::isNotBlank).map { line ->
             line.split(',').map { it.toInt() }.let { it[0] to it[1] }
         }

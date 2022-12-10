@@ -8,11 +8,11 @@ fun main() {
     }
 }
 
-private class Day08 : Solution {
+class Day08 : Solution() {
     override val day = 8
     override val year = 2015
 
-    override fun part1(input: List<String>): Any {
+    override fun part1(): Any {
         return input.sumOf { line ->
             // Count the non-printable characters
             var count = 2
@@ -46,7 +46,7 @@ private class Day08 : Solution {
         }
     }
 
-    override fun part2(input: List<String>): Any {
+    override fun part2(): Any {
         return input.sumOf { line ->
             // Count the non-printable characters after "encoding" the string
             var count = 4

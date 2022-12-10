@@ -8,7 +8,7 @@ fun main() {
     }
 }
 
-private class Day24 : Solution {
+class Day24 : Solution() {
     override val day = 24
     override val year = 2021
 
@@ -37,11 +37,11 @@ private class Day24 : Solution {
         return result.joinToString("").toLong()
     }
 
-    override fun part1(input: List<String>): Any {
+    override fun part1(): Any {
         return common(input, false)
     }
 
-    override fun part2(input: List<String>): Any {
+    override fun part2(): Any {
         return common(input, true)
     }
 }

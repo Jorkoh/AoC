@@ -10,11 +10,11 @@ fun main() {
     }
 }
 
-private class Day14 : Solution {
+class Day14 : Solution() {
     override val day = 14
     override val year = 2021
 
-    override fun part1(input: List<String>): Any {
+    override fun part1(): Any {
         var pairCounts = input.first().windowed(2).associate { (it[0] to it[1]) to 1L }
         val rules = input.drop(2).associate { (it[0] to it[1]) to it[6] }
 
@@ -39,7 +39,7 @@ private class Day14 : Solution {
         return charCounts.toList().sortedBy { it.second }.let { it.last().second - it.first().second } / 2
     }
 
-    override fun part2(input: List<String>): Any {
+    override fun part2(): Any {
         var pairCounts = input.first().windowed(2).associate { (it[0] to it[1]) to 1L }
         val rules = input.drop(2).associate { (it[0] to it[1]) to it[6] }
 

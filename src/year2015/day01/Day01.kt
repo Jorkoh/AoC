@@ -18,16 +18,17 @@ fun main() {
     }
 }
 
-private class Day01 : Solution {
+class Day01 : Solution() {
     override val day = 1
     override val year = 2015
 
-    override fun part1(input: List<String>): Any {
+    @Suppress("DEPRECATION")
+    override fun part1(): Any {
         // https://youtrack.jetbrains.com/issue/KT-46360
         return input.first().sumBy { if (it == '(') 1 else -1 }
     }
 
-    override fun part2(input: List<String>): Any {
+    override fun part2(): Any {
         return input.first().foldIndexed(0) { index, previous, c ->
             val current = previous + if (c == '(') 1 else -1
             if (current == -1) return index + 1

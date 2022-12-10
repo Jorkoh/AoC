@@ -11,11 +11,11 @@ fun main() {
     }
 }
 
-private class Day08 : Solution {
+class Day08 : Solution() {
     override val day = 8
     override val year = 2021
 
-    override fun part1(input: List<String>): Int {
+    override fun part1(): Int {
         val entries = input.map { line ->
             val (signals, output) = line.split(" | ").map { it.split(' ') }
             Pair(signals, output)
@@ -24,7 +24,7 @@ private class Day08 : Solution {
         return entries.sumOf { (_, output) -> output.count { it.length in setOf(2, 4, 3, 7) } }
     }
 
-    override fun part2(input: List<String>): Int {
+    override fun part2(): Int {
         val entries = input.map { line ->
             val (signals, output) = line.split(" | ").map { it.split(' ') }
             Pair(signals, output)

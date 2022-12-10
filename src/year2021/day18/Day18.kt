@@ -12,7 +12,7 @@ fun main() {
     }
 }
 
-private class Day18 : Solution {
+class Day18 : Solution() {
     override val day = 18
     override val year = 2021
 
@@ -149,13 +149,13 @@ private class Day18 : Solution {
         return root
     }
 
-    override fun part1(input: List<String>): Any {
+    override fun part1(): Any {
         return input.indices.drop(1).fold(readTree(input.first())) { acc, i ->
             (acc + readTree(input[i])).apply { this.reduce() }
         }.magnitude()
     }
 
-    override fun part2(input: List<String>): Any {
+    override fun part2(): Any {
         return input.indices.maxOf { i ->
             input.indices.filter { it != i }.maxOf { j ->
                 (readTree(input[i]) + readTree(input[j])).reduce().magnitude()

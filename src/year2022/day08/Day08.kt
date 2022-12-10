@@ -1,7 +1,10 @@
 package year2022.day08
 
+import kotlinx.benchmark.*
+import org.openjdk.jmh.annotations.State
 import utils.Solution
 import year2022.day08.Day08.Direction.*
+import java.util.concurrent.TimeUnit
 
 fun main() {
     with(Day08()) {
@@ -12,13 +15,19 @@ fun main() {
     }
 }
 
-private class Day08 : Solution {
+@State(Scope.Benchmark)
+@Warmup(iterations = 4, time = 2, timeUnit = TimeUnit.SECONDS)
+@Measurement(iterations = 4, time = 2, timeUnit = TimeUnit.SECONDS)
+@BenchmarkMode(Mode.AverageTime)
+@OutputTimeUnit(TimeUnit.MICROSECONDS)
+class Day08 : Solution() {
     override val day = 8
     override val year = 2022
 
     enum class Direction { Left, Right, Top, Bottom }
 
-    override fun part1(input: List<String>): Any {
+    @Benchmark
+    override fun part1(): Any {
         val visibilities = Direction.values().map { dir -> input.isVisible(dir) }
         return input.indices.sumOf { i -> input.indices.count { j -> visibilities.any { it[i][j] } } }
     }
@@ -42,7 +51,8 @@ private class Day08 : Solution {
         return result
     }
 
-    override fun part2(input: List<String>): Any {
+    @Benchmark
+    override fun part2(): Any {
         val visionRanges = Direction.values().map { dir -> input.visionRange(dir) }
         return input.indices.maxOf { i ->
             input.indices.maxOf { j ->
@@ -54,7 +64,7 @@ private class Day08 : Solution {
     private fun List<String>.visionRange(towards: Direction): List<List<Int>> {
         val result = MutableList(size) { MutableList(size) { 0 } }
         for (i in indices) {
-            val hToPos = IntArray(10) { 0 } // Relative to edge
+            val hToPos = IntArray(10) { 0 } // Relative to edge // TODO rewrite with a decreasing stack
             for (j in indices) {
                 val (r, c) = when (towards) {
                     Left -> i to j

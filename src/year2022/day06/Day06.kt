@@ -18,12 +18,12 @@ fun main() {
     }
 }
 
-private class Day06 : Solution {
+class Day06 : Solution() {
     override val day = 6
     override val year = 2022
 
-    override fun part1(input: List<String>) = input.first().solve(4)
-    override fun part2(input: List<String>) = input.first().solve(14)
+    override fun part1() = input.first().solve(4)
+    override fun part2() = input.first().solve(14)
 
     private fun String.solve(size: Int) = windowed(size).indexOfFirst { it.toSet().size == size } + size
 }

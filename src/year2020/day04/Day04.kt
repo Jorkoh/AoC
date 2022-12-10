@@ -12,11 +12,11 @@ fun main() {
     }
 }
 
-private class Day04 : Solution {
+class Day04 : Solution() {
     override val day = 4
     override val year = 2020
 
-    override fun part1(input: List<String>): Any {
+    override fun part1(): Any {
         val passports = buildList<List<Pair<String, String>>> {
             var fields = mutableListOf<Pair<String, String>>()
             for (line in input) {
@@ -38,7 +38,7 @@ private class Day04 : Solution {
         return passports.count { passport -> passport.map { it.first }.containsAll(required) }
     }
 
-    override fun part2(input: List<String>): Any {
+    override fun part2(): Any {
         val passports = buildList<List<Pair<String, String>>> {
             var fields = mutableListOf<Pair<String, String>>()
             for (line in input) {

@@ -10,18 +10,18 @@ fun main() {
     }
 }
 
-private class Day03 : Solution {
+class Day03 : Solution() {
     override val day = 3
     override val year = 2021
 
-    override fun part1(input: List<String>): Int {
+    override fun part1(): Int {
         val gamma = input.first().indices.map { i -> if (input.count { it[i] == '1' } >= input.size / 2f) '1' else '0' }
         val epsilon = gamma.map { if (it == '1') '0' else '1' }
 
         return gamma.bToD() * epsilon.bToD()
     }
 
-    override fun part2(input: List<String>): Int {
+    override fun part2(): Int {
         val remainingO2 = input.toMutableList()
         val remainingCO2 = input.toMutableList()
 

@@ -14,11 +14,11 @@ fun main() {
     }
 }
 
-private class Day12 : Solution {
+class Day12 : Solution() {
     override val day = 12
     override val year = 2021
 
-    override fun part1(input: List<String>): Any {
+    override fun part1(): Any {
         val adjacencies = buildMap<String, MutableList<String>> {
             input.forEach {
                 val (v1, v2) = it.split('-')
@@ -30,7 +30,7 @@ private class Day12 : Solution {
         return dfs("start", "end", mutableSetOf(), adjacencies)
     }
 
-    override fun part2(input: List<String>): Any {
+    override fun part2(): Any {
         val adjacencies = buildMap<String, MutableList<String>> {
             input.forEach {
                 val (v1, v2) = it.split('-')

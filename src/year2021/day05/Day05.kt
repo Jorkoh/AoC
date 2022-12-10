@@ -10,11 +10,11 @@ fun main() {
     }
 }
 
-private class Day05 : Solution {
+class Day05 : Solution() {
     override val day = 5
     override val year = 2021
 
-    override fun part1(input: List<String>): Int {
+    override fun part1(): Int {
         val lines = input.map { line ->
             val (start, end) = line.split(" -> ")
             val (startX, startY) = start.split(',').map { it.toInt() }
@@ -37,7 +37,7 @@ private class Day05 : Solution {
         }
     }
 
-    override fun part2(input: List<String>): Int {
+    override fun part2(): Int {
         val lines = input.map { line ->
             val (start, end) = line.split(" -> ")
             val (startX, startY) = start.split(',').map { it.toInt() }

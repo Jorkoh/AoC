@@ -9,11 +9,11 @@ fun main() {
     }
 }
 
-private class Day13_alt : Solution {
+class Day13_alt : Solution() {
     override val day = 13
     override val year = 2015
 
-    override fun part1(input: List<String>): Any {
+    override fun part1(): Any {
         val peopleToIndex = input.peopleToIndex()
         val happinessTable = input.parseHappiness(peopleToIndex)
 
@@ -48,7 +48,7 @@ private class Day13_alt : Solution {
         }
     }
 
-    override fun part2(input: List<String>): Any {
+    override fun part2(): Any {
         val originalPeopleToIndex = input.peopleToIndex().toMutableMap()
         val originalHappinessTable = input.parseHappiness(originalPeopleToIndex)
 

@@ -21,7 +21,7 @@ fun main() {
 // To sum up: if they are in their starting spot they can move to available hallway, optionally stop and
 // then enter their final room to rest (without blocking an external one in that room)
 // NOTICING THAT IF AN AMPHI CAN ENTER ITS ROOM THAT'S THE BEST MOVE MADE IT GO FROM 55 TO 3 SECONDS
-private class Day23 : Solution {
+class Day23 : Solution() {
     override val day = 23
     override val year = 2021
 
@@ -142,7 +142,7 @@ private class Day23 : Solution {
   """.trimIndent()
     }
 
-    override fun part1(input: List<String>): Any {
+    override fun part1(): Any {
         val initialBoard = Board(
             amphis = listOf(
                 Amphi(Type.valueOf(input[2][3].toString()), 11),
@@ -181,7 +181,7 @@ private class Day23 : Solution {
         return minimumScore
     }
 
-    override fun part2(input: List<String>): Any {
+    override fun part2(): Any {
         val initialBoard = Board(
             amphis = listOf(
                 Amphi(Type.valueOf(input[2][3].toString()), 11),

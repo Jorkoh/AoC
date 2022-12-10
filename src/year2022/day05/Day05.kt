@@ -10,11 +10,11 @@ fun main() {
     }
 }
 
-private class Day05 : Solution {
+class Day05 : Solution() {
     override val day = 5
     override val year = 2022
 
-    override fun part1(input: List<String>): Any {
+    override fun part1(): Any {
         val stacks = input.parseStacks()
         input.dropWhile { it.firstOrNull() != 'm' }.map(::parseInstruction).forEach { (count, from, to) ->
             repeat(count) {
@@ -26,7 +26,7 @@ private class Day05 : Solution {
         return stacks.map { it.last() }.joinToString(separator = "")
     }
 
-    override fun part2(input: List<String>): Any {
+    override fun part2(): Any {
         val stacks = input.parseStacks()
         input.dropWhile { it.firstOrNull() != 'm' }.map(::parseInstruction).forEach { (count, from, to) ->
             val toMove = stacks[from - 1].takeLast(count)

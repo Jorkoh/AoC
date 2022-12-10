@@ -10,15 +10,15 @@ fun main() {
     }
 }
 
-private class Day04 : Solution {
+class Day04 : Solution() {
     override val day = 4
     override val year = 2022
 
-    override fun part1(input: List<String>): Any {
+    override fun part1(): Any {
         return input.map(::parse).count { (l1, h1, l2, h2) -> l1 <= l2 && h1 >= h2 || l2 <= l1 && h2 >= h1 }
     }
 
-    override fun part2(input: List<String>): Any {
+    override fun part2(): Any {
         return input.map(::parse).count { (l1, h1, l2, h2) -> h1 >= l2 && l1 <= h2 }
     }
 

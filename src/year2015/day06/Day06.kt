@@ -11,11 +11,11 @@ fun main() {
     }
 }
 
-private class Day06 : Solution {
+class Day06 : Solution() {
     override val day = 6
     override val year = 2015
 
-    override fun part1(input: List<String>): Any {
+    override fun part1(): Any {
         val instructions = input.parseInstructions()
         val n = 1000
 
@@ -43,7 +43,7 @@ private class Day06 : Solution {
         }
     }
 
-    override fun part2(input: List<String>): Any {
+    override fun part2(): Any {
         val instructions = input.parseInstructions()
         val n = 1000
 

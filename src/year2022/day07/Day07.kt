@@ -11,7 +11,7 @@ fun main() {
     }
 }
 
-private class Day07 : Solution {
+class Day07 : Solution() {
     override val day = 7
     override val year = 2022
 
@@ -25,7 +25,7 @@ private class Day07 : Solution {
     private data class File(val name: String, val size: Int)
     private data class DirSize(val name: String, val size: Int)
 
-    override fun part1(input: List<String>): Any {
+    override fun part1(): Any {
         val root = input.parseInstructions()
 
         val dirSizes = mutableListOf<DirSize>()
@@ -34,7 +34,7 @@ private class Day07 : Solution {
         return dirSizes.filter { it.size <= 100000 }.sumOf { it.size }
     }
 
-    override fun part2(input: List<String>): Any {
+    override fun part2(): Any {
         val root = input.parseInstructions()
 
         val dirSizes = mutableListOf<DirSize>()

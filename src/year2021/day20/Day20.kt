@@ -10,11 +10,11 @@ fun main() {
     }
 }
 
-private class Day20 : Solution {
+class Day20 : Solution() {
     override val day = 20
     override val year = 2021
 
-    override fun part1(input: List<String>): Any {
+    override fun part1(): Any {
         val algorithm = input.first()
         val initialImage = input.drop(2)
 
@@ -23,7 +23,7 @@ private class Day20 : Solution {
         return enhanced.sumOf { row -> row.count { it == '#' } }
     }
 
-    override fun part2(input: List<String>): Any {
+    override fun part2(): Any {
         val algorithm = input.first()
         val initialImage = input.drop(2)
 
