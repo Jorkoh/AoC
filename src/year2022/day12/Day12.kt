@@ -16,57 +16,56 @@ class Day12 : Solution() {
     override val year = 2022
 
     override fun part1(): Any {
-
         return shortestPath(
-            startChar = 'S',
-            endChar = 'E',
+            isStart = { it == 'S' },
+            isEnd = { it == 'E' },
             canMove = { from, to -> to <= from + 1 }
         )
     }
 
     override fun part2(): Any {
         return shortestPath(
-            startChar = 'E',
-            endChar = 'a',
+            isStart = { it == 'E' },
+            isEnd = { it == 'a' || it == 'S' },
             canMove = { from, to -> from <= to + 1 }
         )
     }
 
     private fun shortestPath(
-        startChar: Char,
-        endChar: Char,
-        canMove: (Int, Int) -> Boolean
+        isStart: (Char) -> Boolean,
+        isEnd: (Char) -> Boolean,
+        canMove: (Char, Char) -> Boolean
     ): Int {
-        val startY = input.indexOfFirst { it.contains(startChar) }
-        val start = input[startY].indexOfFirst { it == startChar } to startY
+        val start = input.indexOfFirst { it.any(isStart) }.let { y -> input[y].indexOfFirst(isStart) to y }
         var end = -1 to -1
-        val mapW = input.first().length
-        val mapH = input.size
-        val steps = mutableMapOf(start to 0)
+        val (n, m) = input.first().length to input.size
+        val positionToCost = mutableMapOf(start to 0)
         val frontier = ArrayDeque(listOf(start))
 
         while (frontier.isNotEmpty()) {
-            val c = frontier.removeFirst()
-            if (input[c.second][c.first] == endChar) {
-                end = c
+            val current = frontier.removeFirst()
+            if (isEnd(input[current.second][current.first])) {
+                end = current
                 break
             }
-            neighbors(c, mapW, mapH).forEach { n ->
-                if (n !in steps && canMove(input[c.second][c.first].value(), input[n.second][n.first].value())) {
-                    steps[n] = steps[c]!! + 1
-                    frontier.addLast(n)
+            neighbors(current, n, m).forEach { next ->
+                val currentV = input[current.second][current.first].value()
+                val nextV = input[next.second][next.first].value()
+                if (next !in positionToCost && canMove(currentV, nextV)) {
+                    positionToCost[next] = positionToCost[current]!! + 1
+                    frontier.addLast(next)
                 }
             }
         }
 
-        return steps[end]!!
+        return positionToCost[end]!!
     }
 
     private fun Char.value() = when (this) {
         'S' -> 'a'
         'E' -> 'z'
         else -> this
-    } - 'a'
+    }
 
     private fun neighbors(location: Pair<Int, Int>, width: Int, height: Int): List<Pair<Int, Int>> {
         val (x, y) = location
