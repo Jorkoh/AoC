@@ -29,18 +29,16 @@ class Day20 : Solution() {
         return instructions.sumCoordinates()
     }
 
-    private fun parseInstructions(multiplier: Long = 1L) = buildList {
-        val first = Instruction(input.first().toLong() * multiplier, null, null)
-        add(first)
-        var previous = first
-        for (s in input.drop(1)) {
+    private fun parseInstructions(multiplier: Long = 1L) = buildList<Instruction> {
+        var previous: Instruction? = null
+        for (s in input) {
             val current = Instruction(s.toLong() * multiplier, previous, null)
             add(current)
-            previous.next = current
+            previous?.next = current
             previous = current
         }
-        previous.next = first
-        first.previous = previous
+        previous!!.next = first()
+        first().previous = previous
     }
 
     private fun List<Instruction>.applyInstructions() {
