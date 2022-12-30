@@ -31,8 +31,8 @@ class Day17 : Solution() {
         val wind = input.first()
         var turn = 0
         val filled = mutableSetOf<Co>()
-        var shapeCount = 0
-        var highestShapeY = 0
+        var count = 0
+        var height = 0
         var shape = shapes.first()
         var shapePos = Co(3, 4 + shape.low)
 
@@ -46,29 +46,29 @@ class Day17 : Solution() {
                 shapePos = fellPos
             } else { // If it collides it rests
                 filled.addAll(shape.coords.map { it + shapePos })
-                highestShapeY = max(shapePos.y, highestShapeY)
-                if (shapeCount == 2021) break // Termination
-                shape = shapes[++shapeCount % shapes.size]
-                shapePos = Co(3, highestShapeY + 4 + shape.low)
+                height = max(shapePos.y, height)
+                if (count == 2021) break // Termination
+                shape = shapes[++count % shapes.size]
+                shapePos = Co(3, height + 4 + shape.low)
             }
             turn++
         }
 
-        return highestShapeY
+        return height
     }
 
-    private data class State(val windIndex: Int, val shapeIndex: Int, val filledLast24: List<Co>)
+    private data class Stats(val count: Int, val height: Int)
+    private data class State(val windIndex: Int, val shapeIndex: Int, val lastFilled: List<Co>)
 
     override fun part2(): Any {
         val wind = input.first()
         var turn = 0
         val filled = mutableSetOf<Co>()
-        var shapeCount = 0
-        var highestShapeY = 0
+        var count = 1
+        var height = 0
         var shape = shapes.first()
         var shapePos = Co(3, 4 + shape.low)
-        val stateToShapeCountAndHeight = mutableMapOf<State, Pair<Int, Int>>()
-        var lastHit: Pair<Int, Int>? = null
+        val statesToStats = mutableMapOf<State, Stats>()
 
         while (true) {
             // Wind push
@@ -80,43 +80,40 @@ class Day17 : Solution() {
                 shapePos = fellPos
             } else { // If it collides it rests
                 filled.addAll(shape.coords.map { it + shapePos })
-                highestShapeY = max(shapePos.y, highestShapeY)
-                /**/
-                val state = calculateState(
-                    highestShapeY = highestShapeY,
-                    filled = filled,
+                height = max(shapePos.y, height)
+                // Check if we loop. If state looped we can immediately calculate the remaining
+                val state = State(
                     windIndex = turn % wind.length,
-                    shapeIndex = shapeCount % shapes.size
+                    shapeIndex = (count - 1) % shapes.size,
+                    lastFilled = filled.getLastFilled(height)
                 )
-                if (state in stateToShapeCountAndHeight) {
-                    val hit = stateToShapeCountAndHeight[state]!!
-                    if (lastHit != null && hit.first < lastHit.first) {
-                        // We have completed the first full loop
-                        val length = lastHit.first - hit.first
-                        val heightDiff = lastHit.second - hit.second
-                        val initialCount = hit.first
-                        val initialHeight = hit.second
-                        val toTheEnd = 1000000000000L - hit.first
-                        val fullCycles = toTheEnd / length
-                        val partialLastCycle = toTheEnd % length
-                        val heightFromPartialLastCycle = stateToShapeCountAndHeight.values.first {
-                            it.first.toLong() == partialLastCycle + initialCount
-                        }.second - initialHeight
-                        return fullCycles * heightDiff + heightFromPartialLastCycle + initialHeight
-                    }
-                    lastHit = hit
-                    println("[shape count, height] $shapeCount, $highestShapeY == ${hit.first}, ${hit.second}")
-                } else {
-                    stateToShapeCountAndHeight[state] = shapeCount to highestShapeY
-                }
-                /**/
-                shape = shapes[++shapeCount % shapes.size]
-                shapePos = Co(3, highestShapeY + 4 + shape.low)
+                if (state in statesToStats) return calculateAtEnd(statesToStats, state, count, height)
+                else statesToStats[state] = Stats(count, height)
+                // Spawn next
+                count++
+                shape = shapes[(count - 1) % shapes.size]
+                shapePos = Co(3, height + 4 + shape.low)
             }
             turn++
         }
+    }
 
-        return -1
+    private fun calculateAtEnd(
+        statesToStats: MutableMap<State, Stats>,
+        state: State,
+        count: Int,
+        height: Int
+    ): Long {
+        val start = statesToStats[state]!!
+        val loopLength = count - start.count
+        val loopHeightGain = height - start.height
+        val remaining = 1000000000000L - start.count
+        val remainingCycles = remaining / loopLength
+        val partialLastCycle = (remaining % loopLength).toInt()
+        val heightFromPartialLastCycle = statesToStats.values.first { (vCount, _) ->
+            vCount == partialLastCycle + start.count
+        }.height - start.height
+        return remainingCycles * loopHeightGain + heightFromPartialLastCycle + start.height
     }
 
     private fun Shape.collides(pos: Co, filled: Set<Co>) = coords.any { p ->
@@ -124,21 +121,13 @@ class Day17 : Solution() {
         posP.x < 1 || posP.x > 7 || posP.y < 1 || posP in filled
     }
 
-    private fun calculateState(
-        highestShapeY: Int,
-        filled: Set<Co>,
-        windIndex: Int,
-        shapeIndex: Int
-    ): State {
-        val filledLast24 = mutableListOf<Co>() // Relative
-        for (y in 0 downTo -24) {
+    private fun Set<Co>.getLastFilled(height: Int, range: Int = 24) = buildList {
+        for (y in 0 downTo -range) {
             for (x in 1..7) {
                 val co = Co(x, y)
-                if (Co(0, highestShapeY) + co in filled) filledLast24.add(co)
+                if (Co(0, height) + co in this@getLastFilled) add(co)
             }
         }
-
-        return State(windIndex, shapeIndex, filledLast24)
     }
 
     private fun Set<Co>.print(shape: Shape, shapePos: Co) {
