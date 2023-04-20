@@ -2,7 +2,6 @@ package year2022.day14
 
 import utils.Solution
 import kotlin.math.roundToInt
-import kotlin.math.sqrt
 
 fun main() {
     with(Day14()) {
@@ -18,64 +17,62 @@ class Day14 : Solution() {
     override val year = 2022
 
     private data class Coords(val x: Int, val y: Int)
+    private data class State(val walls: MutableSet<Coords>, val sand: MutableSet<Coords>)
 
     override fun part1(): Any {
-        val walls = input.getWalls()
-        val sand = mutableSetOf<Coords>()
+        val state = State(input.getWalls(), mutableSetOf())
+        val lowestWall = state.walls.maxOf { it.y }
+        val backStack = ArrayDeque(listOf(Coords(500, 0)))
 
-        var freeFalling = false
-        while (!freeFalling) { // Overall simulation ends on free fall
-            var grain = Coords(500, 0)
-            var steps = 0
-            var resting = false
-            while (!resting && !freeFalling) { // Simulate until rest or free fall
-                val down = grain.copy(y = grain.y + 1)
-                val downLeft = grain.copy(x = grain.x - 1, y = grain.y + 1)
-                val downRight = grain.copy(x = grain.x + 1, y = grain.y + 1)
-                when {
-                    down.isOpen(walls, sand) -> grain = down
-                    downLeft.isOpen(walls, sand) -> grain = downLeft
-                    downRight.isOpen(walls, sand) -> grain = downRight
-                    else -> resting = true
+        while (backStack.isNotEmpty()) {
+            val current = backStack.first()
+            if (current.y >= lowestWall) break  // Termination condition when it's on free fall
+
+            val down = current.copy(y = current.y + 1)
+            val downLeft = down.copy(x = down.x - 1)
+            val downRight = down.copy(x = down.x + 1)
+            when {
+                state.isOpen(down) -> backStack.addFirst(down)
+                state.isOpen(downLeft) -> backStack.addFirst(downLeft)
+                state.isOpen(downRight) -> backStack.addFirst(downRight)
+                else -> {
+                    state.sand.add(current)
+                    backStack.removeFirst()
                 }
-
-                if (steps++ > 2000) freeFalling = true
             }
-            sand.add(grain.copy())
         }
 
-        return sand.size - 1 // Last grain is lost in the abyss, don't count it
+        return state.sand.size
     }
 
     override fun part2(): Any {
-        val walls = input.getWalls()
-        val sand = mutableSetOf<Coords>()
+        val state = State(input.getWalls(), mutableSetOf())
+        val backStack = ArrayDeque(listOf(Coords(500, 0)))
 
-        // ADD THE FLOOR
-        val side = (2 * 500 / (sqrt(3.0))).roundToInt()
-        val floorMinX = walls.minOf { it.x } - side / 2
-        val floorMaxX = walls.maxOf { it.x } + side / 2
-        val floorY = walls.maxOf { it.y } + 2
-        walls.addAll((floorMinX..floorMaxX).map { x -> Coords(x, floorY) })
+        // ADD THE FLOOR, extends [tan45 * height] each side, +1 to catch the sand
+        val floorY = state.walls.maxOf { it.y } + 2
+        val side = (1.6198 * floorY).roundToInt() + 1
+        state.walls.addAll(((500 - side)..(500 + side)).map { x -> Coords(x, floorY) })
 
-        while (Coords(500, 0).isOpen(walls, sand)) { // Overall simulation ends when source gets blocked
-            var grain = Coords(500, 0)
-            var resting = false
-            while (!resting) { // Simulate until rest
-                val down = grain.copy(y = grain.y + 1)
-                val downLeft = grain.copy(x = grain.x - 1, y = grain.y + 1)
-                val downRight = grain.copy(x = grain.x + 1, y = grain.y + 1)
-                when {
-                    down.isOpen(walls, sand) -> grain = down
-                    downLeft.isOpen(walls, sand) -> grain = downLeft
-                    downRight.isOpen(walls, sand) -> grain = downRight
-                    else -> resting = true
+        while (backStack.isNotEmpty()) {
+            val current = backStack.first()
+            if (current.y < 0) break    // Termination condition when it's blocking the spawn
+
+            val down = current.copy(y = current.y + 1)
+            val downLeft = down.copy(x = down.x - 1)
+            val downRight = down.copy(x = down.x + 1)
+            when {
+                state.isOpen(down) -> backStack.addFirst(down)
+                state.isOpen(downLeft) -> backStack.addFirst(downLeft)
+                state.isOpen(downRight) -> backStack.addFirst(downRight)
+                else -> {
+                    state.sand.add(current)
+                    backStack.removeFirst()
                 }
             }
-            sand.add(grain.copy())
         }
 
-        return sand.size
+        return state.sand.size
     }
 
     private fun List<String>.getWalls() = this.flatMap { l ->
@@ -93,5 +90,24 @@ class Day14 : Solution() {
         }
     }.toMutableSet()
 
-    private fun Coords.isOpen(walls: Set<Coords>, sand: Set<Coords>) = this !in sand && this !in walls
+    private fun State.isOpen(c: Coords) = c !in sand && c !in walls
+
+    private fun State.printState(c: Coords) {
+        val xRange = 480..520
+        val yRange = 0..10
+        for (y in yRange) {
+            for (x in xRange) {
+                val c = Coords(x, y)
+                print(
+                    when (c) {
+                        in sand -> 'o'
+                        in walls -> '#'
+                        c -> '+'
+                        else -> ' '
+                    }
+                )
+            }
+            println()
+        }
+    }
 }
