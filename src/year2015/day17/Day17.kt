@@ -19,7 +19,7 @@ class Day17 : Solution() {
     var target = 150
 
     override fun part1(): Any {
-        val containers = input.map(String::toInt).sortedDescending()
+        val containers = input.map(String::toInt)
 
         return sumCombinations(containers, target)
     }
@@ -40,32 +40,37 @@ class Day17 : Solution() {
     }
 
     override fun part2(): Any {
-        val containers = input.map(String::toInt).sortedDescending()
+        val containers = input.map(String::toInt)
 
-        val state = State()
+        val state = Part2State()
         sumCombinationsWithMin(containers, target, 0, state)
 
-        return state.valid
+        return state.countWithMinContainers
     }
 
-    class State(var valid: Int = 0, var minContainers: Int = Int.MAX_VALUE)
+    private class Part2State(var countWithMinContainers: Int = 0, var minContainers: Int = Int.MAX_VALUE)
 
-    private fun sumCombinationsWithMin(containers: List<Int>, remaining: Int, count: Int, s: State) {
+    private fun sumCombinationsWithMin(
+        containers: List<Int>,
+        remaining: Int,
+        containersUsed: Int,
+        s: Part2State
+    ) {
         when {
-            count > s.minContainers -> return // Overshot the target set by the minimum container combination
+            containersUsed > s.minContainers -> return // Overshot the target set by the minimum container combination
             remaining < 0 -> return // Overshot the target
             remaining == 0 -> { // Found a valid combination
-                if (count < s.minContainers) {
-                    s.minContainers = count
-                    s.valid = 0
+                if (containersUsed < s.minContainers) { // It forms a new minimum
+                    s.minContainers = containersUsed
+                    s.countWithMinContainers = 0 // Reset the count since there's a new minimum
                 }
-                s.valid += 1
+                s.countWithMinContainers += 1
             }
             else -> containers.withIndex().forEach { (i, container) ->
                 sumCombinationsWithMin(
                     containers = containers.drop(i + 1),
                     remaining = remaining - container,
-                    count = count + 1,
+                    containersUsed = containersUsed + 1,
                     s = s
                 )
             }
