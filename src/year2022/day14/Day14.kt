@@ -56,11 +56,10 @@ class Day14 : Solution() {
 
         while (backStack.isNotEmpty()) {
             val current = backStack.first()
-            if (current.y < 0) break    // Termination condition when it's blocking the spawn
-
             val down = current.copy(y = current.y + 1)
             val downLeft = down.copy(x = down.x - 1)
             val downRight = down.copy(x = down.x + 1)
+
             when {
                 state.isOpen(down) -> backStack.addFirst(down)
                 state.isOpen(downLeft) -> backStack.addFirst(downLeft)
@@ -92,9 +91,9 @@ class Day14 : Solution() {
 
     private fun State.isOpen(c: Coords) = c !in sand && c !in walls
 
-    private fun State.printState(c: Coords) {
-        val xRange = 480..520
-        val yRange = 0..10
+    private fun State.printState() {
+        val xRange = walls.minOf { it.x }..walls.maxOf { it.x }
+        val yRange = 0..walls.maxOf { it.y }
         for (y in yRange) {
             for (x in xRange) {
                 val c = Coords(x, y)
@@ -102,8 +101,7 @@ class Day14 : Solution() {
                     when (c) {
                         in sand -> 'o'
                         in walls -> '#'
-                        c -> '+'
-                        else -> ' '
+                        else -> '.'
                     }
                 )
             }
